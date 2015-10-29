@@ -63,12 +63,12 @@
 
         private float OpponetsPointsMod(Card card, PlayerTurnContext context)
         {
-            return -card.GetValue() / context.FirstPlayerRoundPoints * CardEval.OpponetPointsValueParameter;
+            return -card.GetValue() / (66 - context.FirstPlayerRoundPoints) * CardEval.OpponetPointsValueParameter;
         }
 
         private float MyPointsMod(Card card, PlayerTurnContext context)
         {
-            return +card.GetValue() / context.SecondPlayerRoundPoints * CardEval.OpponetPointsValueParameter;
+            return +card.GetValue() / (66-context.SecondPlayerRoundPoints) * CardEval.OpponetPointsValueParameter;
         }
     }
 }
