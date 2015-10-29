@@ -2,19 +2,20 @@
 {
     using System.Linq;
     using CardTracers;
+    using Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 
-    public class CardEval
+    public class CardEval : ICardEvaluator
     {
         public const float PointValueParameter = 1;
         public const float TrickValueParameter = 1;
         public const float OpponetPointsValueParameter = 1;
         public const float MyPointsValueParameter = 1;
 
-        private CardTracer cardTracer;
+        private ICardTracer cardTracer;
 
-        public CardEval(CardTracer ct)
+        public CardEval(ICardTracer ct)
         {
             this.cardTracer = ct;
         }

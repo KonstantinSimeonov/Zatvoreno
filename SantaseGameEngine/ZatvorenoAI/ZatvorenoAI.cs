@@ -5,6 +5,7 @@
     using System.Linq;
     using CardTracers;
     using Contracts;
+    using CardEvaluator;
     using Reporters;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
@@ -17,6 +18,8 @@
 
         private static readonly ICardTracer Tracer = new CardTracer();
 
+        private static readonly ICardEvaluator Evaluator = new CardEval(Tracer);
+
         public override string Name
         {
             get
@@ -25,32 +28,32 @@
             }
         }
 
-        public static string GetReports()
+        public static string GetReports ()
         {
             return GameReport.ToString();
         }
 
-        public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
+        public override void StartRound (ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
             Tracer.CurrentTrumpCard = trumpCard;
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
-        public override void EndTurn(PlayerTurnContext context)
+        public override void EndTurn (PlayerTurnContext context)
         {
             Tracer.TraceTurn(context);
 
             base.EndTurn(context);
         }
 
-        public override void EndRound()
+        public override void EndRound ()
         {
             Tracer.Empty();
 
             base.EndRound();
         }
 
-        public override PlayerAction GetTurn(PlayerTurnContext context)
+        public override PlayerAction GetTurn (PlayerTurnContext context)
         {
             var myPoints = GetMyPoints(context);
 
@@ -99,12 +102,12 @@
 
                 }
 
-                var cards2Play = cardsToPlay
-                                    .Where(c => context.FirstPlayedCard.Suit == c.Suit && context.FirstPlayedCard.Type.CompareTo(c.Type) < 0)
-                                    .OrderByDescending(c => c.Type)
-                                    .ToList();
+                //var cardsToPlayWhenSecond = cardsToPlay
+                //                    .Where(c => context.FirstPlayedCard.Suit == c.Suit && context.FirstPlayedCard.Type.CompareTo(c.Type) < 0)
+                //                    .OrderByDescending(c => c.Type)
+                //                    .ToList();
 
-                var card = cards2Play.FirstOrDefault();
+                var card = cardsToPlay.OrderByDescending(c => Evaluator.CardPlayabilityValue(c, context)).First();
 
                 if (card != null)
                 {
@@ -112,15 +115,19 @@
                 }
             }
 
-            return this.PlayCard(this.PlayerActionValidator.GetPossibleCardsToPlay(context, this.Cards).First());
+            return this.PlayCard(this
+                .PlayerActionValidator
+                .GetPossibleCardsToPlay(context, this.Cards)
+                .OrderByDescending(c => Evaluator.CardPlayabilityValue(c, context))
+                .First());
         }
 
-        private static int GetMyPoints(PlayerTurnContext context)
+        private static int GetMyPoints (PlayerTurnContext context)
         {
             return context.IsFirstPlayerTurn ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints;
         }
 
-        public override void EndGame(bool amIWinner)
+        public override void EndGame (bool amIWinner)
         {
             if (amIWinner)
             {
@@ -130,7 +137,7 @@
             base.EndGame(amIWinner);
         }
 
-        private bool ShouldCloseGame(PlayerTurnContext context, ICollection<Card> cards)
+        private bool ShouldCloseGame (PlayerTurnContext context, ICollection<Card> cards)
         {
             throw new NotImplementedException("Implement close game");
 
