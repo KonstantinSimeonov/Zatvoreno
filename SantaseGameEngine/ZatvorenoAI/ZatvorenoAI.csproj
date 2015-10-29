@@ -39,6 +39,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CardTracers\CardTracer.cs" />
     <Compile Include="Contracts\IReport.cs" />
     <Compile Include="Contracts\Report.cs" />
     <Compile Include="ZatvorenoAI.cs" />

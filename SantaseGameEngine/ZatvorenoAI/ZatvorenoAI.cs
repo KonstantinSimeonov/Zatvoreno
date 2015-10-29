@@ -5,17 +5,18 @@
     using System.Linq;
     using System.Text;
     using Contracts;
+    using CardTracers;
     using Santase.Logic;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 
     public class ZatvorenoAI : BasePlayer
     {
-        private const string AIName = "Peshoq";
+        private const string AIName = "Zatvoreno";
 
-        private static readonly IReport GameReport = new Report();        
+        private static readonly IReport GameReport = new Report();
 
-        private ICollection<Card> cardsPlayed;
+        private static readonly CardTracer Tracer = new CardTracer();
 
         public override string Name
         {
@@ -30,40 +31,27 @@
             return GameReport.ToString();
         }
 
-        public ZatvorenoAI ()
+        public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
-            this.cardsPlayed = new List<Card>();
+            Tracer.CurrentTrumpCard = trumpCard;
+            base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
-        public ICollection<Card> CardsPlayed
+        public override void EndTurn(PlayerTurnContext context)
         {
-            get
-            {
-                return this.cardsPlayed;
-            }
-
-            set
-            {
-                this.cardsPlayed = value;
-            }
-        }
-
-        public override void EndTurn (PlayerTurnContext context)
-        {
-            this.cardsPlayed.Add(context.FirstPlayedCard);
-            this.cardsPlayed.Add(context.SecondPlayedCard);
+            Tracer.TraceTurn(context);
 
             base.EndTurn(context);
         }
 
-        public override void EndRound ()
+        public override void EndRound()
         {
-            cardsPlayed.Clear();
+            Tracer.Empty();
 
             base.EndRound();
         }
 
-        public override PlayerAction GetTurn (PlayerTurnContext context)
+        public override PlayerAction GetTurn(PlayerTurnContext context)
         {
             var myPoints = GetMyPoints(context);
 
@@ -83,13 +71,13 @@
                                     .Where(g => g.Count() > 1)
                                     .ToList();
 
-            var gosho = this.AnnounceValidator.GetPossibleAnnounce(this.Cards, announceCards.FirstOrDefault() == null ? null : announceCards.FirstOrDefault().FirstOrDefault(), context.TrumpCard, context.IsFirstPlayerTurn);
+            var possibleCardsToPlay = this.AnnounceValidator.GetPossibleAnnounce(this.Cards, announceCards.FirstOrDefault() == null ? null : announceCards.FirstOrDefault().FirstOrDefault(), context.TrumpCard, context.IsFirstPlayerTurn);
 
-            if (gosho == Santase.Logic.Announce.Forty || gosho == Santase.Logic.Announce.Twenty)
+            if (possibleCardsToPlay == Santase.Logic.Announce.Forty || possibleCardsToPlay == Santase.Logic.Announce.Twenty)
             {
                 if (this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(announceCards.FirstOrDefault().First()), context, this.Cards))
                 {
-                    GameReport.AnnounceStatistics[gosho]++;
+                    GameReport.AnnounceStatistics[possibleCardsToPlay]++;
                     return this.PlayCard(announceCards.FirstOrDefault().First());
                 }
             }
@@ -128,12 +116,12 @@
             return this.PlayCard(this.PlayerActionValidator.GetPossibleCardsToPlay(context, this.Cards).First());
         }
 
-        private static int GetMyPoints (PlayerTurnContext context)
+        private static int GetMyPoints(PlayerTurnContext context)
         {
             return context.IsFirstPlayerTurn ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints;
         }
 
-        public override void EndGame (bool amIWinner)
+        public override void EndGame(bool amIWinner)
         {
             if (amIWinner)
             {
@@ -143,7 +131,7 @@
             base.EndGame(amIWinner);
         }
 
-        private bool ShouldCloseGame (PlayerTurnContext context, ICollection<Card> cards)
+        private bool ShouldCloseGame(PlayerTurnContext context, ICollection<Card> cards)
         {
             var trumpsInPower = cards.Where(x => x.Suit == context.TrumpCard.Suit).OrderBy(x => x.Type);
 
