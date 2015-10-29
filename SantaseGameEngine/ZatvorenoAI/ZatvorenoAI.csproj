@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
+    <None Include="stylecop.json" />
+    <None Include="stylecop1.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
