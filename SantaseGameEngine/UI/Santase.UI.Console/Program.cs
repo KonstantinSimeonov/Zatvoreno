@@ -13,19 +13,21 @@
         public static void Main()
         {
 
-            for (int i = 0, length = 10000; i < length; i++)
+            for (int i = 0, length = 1000; i < length; i++)
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);
-                if (i % 500 == 0)
+                if (i % ((length/20) + 1) == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.SetCursorPosition(0, 0);
-                    Console.WriteLine((i + 500) + " games done");
+                    Console.WriteLine((i) + " games done");
                 }
             }
 
-            Console.WriteLine(ZatvorenoAI.WinRate);
+            Console.WriteLine(ZatvorenoAI.GetReports());
+
+            // Console.WriteLine(ZatvorenoAI.WinRate);
         }
 
         // ReSharper disable once UnusedMember.Local
@@ -47,7 +49,7 @@
             Console.BufferWidth = Console.WindowWidth = 50;
 
             IPlayer firstPlayer = new ZatvorenoAI();
-            IPlayer secondPlayer = new DummyPlayer();
+            IPlayer secondPlayer = new SmartPlayer();
             ISantaseGame game = new SantaseGame(firstPlayer, secondPlayer);
             return game;
         }

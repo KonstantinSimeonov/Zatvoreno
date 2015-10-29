@@ -4,12 +4,21 @@
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
+    using Santase.Logic;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 
     public class ZatvorenoAI : BasePlayer
     {
+        public const string ReportFormat = "Games won: {1}{0}Trumps changes: {2}{0}Trumped aces and tens: {3}{0}Announces:{0}  - Forty: {4}{0}  - Twenty: {5}{0}";
         public static int WinRate = 0;
+        public static int TrumpsChanged = 0;
+        public static int TrumpedHighCards = 0;
+        public static IDictionary<Announce, int> AnnounceStatistics = new Dictionary<Announce, int>()
+        {
+            { Announce.Forty, 0 },
+            { Announce.Twenty, 0 }
+        };
 
         private const string name = "Peshoq";
 
@@ -27,6 +36,7 @@
 
             if (this.PlayerActionValidator.IsValid(PlayerAction.ChangeTrump(), context, this.Cards))
             {
+                TrumpsChanged++;
                 return this.ChangeTrump(context.TrumpCard);
             }
 
@@ -46,6 +56,7 @@
             {
                 if (this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(announceCards.FirstOrDefault().First()), context, this.Cards))
                 {
+                    AnnounceStatistics[gosho]++;
                     return this.PlayCard(announceCards.FirstOrDefault().First());
                 }
             }
@@ -60,6 +71,7 @@
 
                         if (trump != null && this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(trump), context, this.Cards))
                         {
+                            TrumpedHighCards++;
                             return this.PlayCard(trump);
                         }
 
@@ -91,6 +103,19 @@
             }
 
             base.EndGame(amIWinner);
+        }
+
+        public static string GetReports()
+        {
+            // "Games won: {1}{0}Trumps changes: {2}{0} Trumped aces and tens: {3}{0} Announces:{0}  - Forty: {4}{0}  - Twenty: {5}{0}";
+            return string.Format(
+                                 ReportFormat,
+                                 Environment.NewLine,
+                                 WinRate,
+                                 TrumpsChanged,
+                                 TrumpedHighCards,
+                                 AnnounceStatistics[Announce.Forty],
+                                 AnnounceStatistics[Announce.Twenty]);
         }
     }
 }
