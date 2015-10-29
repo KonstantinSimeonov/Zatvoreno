@@ -8,8 +8,10 @@
     using Santase.Logic.Players;
     using ZatvorenoAI;
 
+    
     public static class Program
     {
+        static ZatvorenoAI me;
         public static void Main()
         {
 
@@ -29,7 +31,7 @@
 
             // Console.WriteLine(ZatvorenoAI.WinRate);
         }
-
+        
         // ReSharper disable once UnusedMember.Local
         private static ISantaseGame CreateTwoPlayerGame()
         {
@@ -49,7 +51,8 @@
             Console.BufferWidth = Console.WindowWidth = 50;
 
             IPlayer firstPlayer = new ZatvorenoAI();
-            IPlayer secondPlayer = new SmartPlayer();
+            me = (ZatvorenoAI)firstPlayer;
+            IPlayer secondPlayer = new DummyPlayer();
             ISantaseGame game = new SantaseGame(firstPlayer, secondPlayer);
             return game;
         }
