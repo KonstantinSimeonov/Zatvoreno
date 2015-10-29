@@ -115,11 +115,13 @@
                 }
             }
 
-            return this.PlayCard(this
+            var cardToPlay = this.PlayCard(this
                 .PlayerActionValidator
                 .GetPossibleCardsToPlay(context, this.Cards)
                 .OrderByDescending(c => Evaluator.CardPlayabilityValue(c, context))
                 .First());
+
+            return cardToPlay;
         }
 
         private static int GetMyPoints (PlayerTurnContext context)

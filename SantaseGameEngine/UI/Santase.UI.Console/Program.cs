@@ -15,7 +15,7 @@
         public static void Main()
         {
 
-            for (int i = 0, length = 1000; i < length; i++)
+            for (int i = 0, length = 10000; i < length; i++)
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);
@@ -31,7 +31,7 @@
 
             // Console.WriteLine(ZatvorenoAI.WinRate);
         }
-        
+
         // ReSharper disable once UnusedMember.Local
         private static ISantaseGame CreateTwoPlayerGame()
         {
@@ -52,7 +52,7 @@
 
             IPlayer firstPlayer = new ZatvorenoAI();
             me = (ZatvorenoAI)firstPlayer;
-            IPlayer secondPlayer = new DummyPlayer();
+            IPlayer secondPlayer = new SmartPlayer();
             ISantaseGame game = new SantaseGame(firstPlayer, secondPlayer);
             return game;
         }
