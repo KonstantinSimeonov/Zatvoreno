@@ -3,10 +3,9 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using Contracts;
     using CardTracers;
-    using Santase.Logic;
+    using Contracts;
+    using Reporters;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 
@@ -16,7 +15,7 @@
 
         private static readonly IReport GameReport = new Report();
 
-        private static readonly CardTracer Tracer = new CardTracer();
+        private static readonly ICardTracer Tracer = new CardTracer();
 
         public override string Name
         {
@@ -133,7 +132,11 @@
 
         private bool ShouldCloseGame(PlayerTurnContext context, ICollection<Card> cards)
         {
-            var trumpsInPower = cards.Where(x => x.Suit == context.TrumpCard.Suit).OrderBy(x => x.Type);
+            throw new NotImplementedException("Implement close game");
+
+            var trumpsInPower = cards
+                                    .Where(x => x.Suit == context.TrumpCard.Suit)
+                                    .OrderBy(x => x.Type);
 
             if (GetMyPoints(context) + trumpsInPower.Sum(x => (long?)x.Type) >= 66)
             {

@@ -1,16 +1,17 @@
 ﻿namespace ZatvorenoAI.CardTracers
 {
     using System.Collections.Generic;
+    using Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 
-    public class CardTracer
+    public class CardTracer : ICardTracer
     {
         public Card CurrentTrumpCard { get; set; }
 
-        public ICollection<Card> PlayedCards { get; set; } = new HashSet<Card>();
+        public ICollection<Card> PlayedCards { get; set; } = new List<Card>();
 
-        public ICollection<Card> OpponentCards { get; set; } = new HashSet<Card>();
+        public ICollection<Card> OpponentCards { get; set; } = new List<Card>();
 
         public void Empty()
         {

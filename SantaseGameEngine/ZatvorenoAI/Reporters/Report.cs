@@ -1,7 +1,8 @@
-﻿namespace ZatvorenoAI.Contracts
+﻿namespace ZatvorenoAI.Reporters
 {
     using System;
     using System.Collections.Generic;
+    using Contracts;
     using Santase.Logic;
 
     public class Report : IReport
