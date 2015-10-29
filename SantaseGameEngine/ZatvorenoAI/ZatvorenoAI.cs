@@ -15,6 +15,8 @@
 
         private static readonly IReport GameReport = new Report();        
 
+        private ICollection<Card> cardsPlayed;
+
         public override string Name
         {
             get
@@ -28,9 +30,42 @@
             return GameReport.ToString();
         }
 
-        public override PlayerAction GetTurn(PlayerTurnContext context)
+        public ZatvorenoAI ()
         {
-            var myPoints = context.IsFirstPlayerTurn ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints;
+            this.cardsPlayed = new List<Card>();
+        }
+
+        public ICollection<Card> CardsPlayed
+        {
+            get
+            {
+                return this.cardsPlayed;
+            }
+
+            set
+            {
+                this.cardsPlayed = value;
+            }
+        }
+
+        public override void EndTurn (PlayerTurnContext context)
+        {
+            this.cardsPlayed.Add(context.FirstPlayedCard);
+            this.cardsPlayed.Add(context.SecondPlayedCard);
+
+            base.EndTurn(context);
+        }
+
+        public override void EndRound ()
+        {
+            cardsPlayed.Clear();
+
+            base.EndRound();
+        }
+
+        public override PlayerAction GetTurn (PlayerTurnContext context)
+        {
+            var myPoints = GetMyPoints(context);
 
             if (this.PlayerActionValidator.IsValid(PlayerAction.ChangeTrump(), context, this.Cards))
             {
@@ -93,7 +128,12 @@
             return this.PlayCard(this.PlayerActionValidator.GetPossibleCardsToPlay(context, this.Cards).First());
         }
 
-        public override void EndGame(bool amIWinner)
+        private static int GetMyPoints (PlayerTurnContext context)
+        {
+            return context.IsFirstPlayerTurn ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints;
+        }
+
+        public override void EndGame (bool amIWinner)
         {
             if (amIWinner)
             {
@@ -102,5 +142,18 @@
 
             base.EndGame(amIWinner);
         }
+
+        private bool ShouldCloseGame (PlayerTurnContext context, ICollection<Card> cards)
+        {
+            var trumpsInPower = cards.Where(x => x.Suit == context.TrumpCard.Suit).OrderBy(x => x.Type);
+
+            if (GetMyPoints(context) + trumpsInPower.Sum(x => (long?)x.Type) >= 66)
+            {
+
+            }
+
+            return false;
+        }
+
     }
 }
