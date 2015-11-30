@@ -18,7 +18,9 @@
 
         private static readonly ICardTracer Tracer = new CardTracer();
 
-        private static readonly ICardEvaluator Evaluator = new CardEval(Tracer);
+        private static readonly ICardEval Evaluator = new CardEval(Tracer);
+
+        private static readonly ICardEval EvaluatorT = new CardEvaluatorFirsPlayer(Tracer);
 
         public override string Name
         {
@@ -90,24 +92,17 @@
                 {
                     if (context.TrumpCard.Suit != context.FirstPlayedCard.Suit)
                     {
-                        var trump = cardsToPlay.FirstOrDefault(x => x.Suit == context.TrumpCard.Suit);
+                        var trump = cardsToPlay.Where(x => x.Suit == context.TrumpCard.Suit).OrderBy(x => x.GetValue()).FirstOrDefault();
 
                         if (trump != null && this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(trump), context, this.Cards))
                         {
                             GameReport.TrumpedHighCards++;
                             return this.PlayCard(trump);
                         }
-
                     }
-
                 }
 
-                //var cardsToPlayWhenSecond = cardsToPlay
-                //                    .Where(c => context.FirstPlayedCard.Suit == c.Suit && context.FirstPlayedCard.Type.CompareTo(c.Type) < 0)
-                //                    .OrderByDescending(c => c.Type)
-                //                    .ToList();
-
-                var card = cardsToPlay.OrderByDescending(c => Evaluator.CardPlayabilityValue(c, context)).First();
+                var card = cardsToPlay.OrderByDescending(c => Evaluator.CardScore(c, context, cardsToPlay)).First();
 
                 if (card != null)
                 {
@@ -118,7 +113,7 @@
             var cardToPlay = this.PlayCard(this
                 .PlayerActionValidator
                 .GetPossibleCardsToPlay(context, this.Cards)
-                .OrderByDescending(c => Evaluator.CardPlayabilityValue(c, context))
+                .OrderBy(c => EvaluatorT.CardScore(c, context, cardsToPlay))
                 .First());
 
             return cardToPlay;
@@ -133,7 +128,7 @@
         {
             if (amIWinner)
             {
-                GameReport.Wins++;
+                ++GameReport.Wins;
             }
 
             base.EndGame(amIWinner);

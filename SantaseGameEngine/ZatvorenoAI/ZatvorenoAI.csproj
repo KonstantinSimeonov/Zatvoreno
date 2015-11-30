@@ -40,7 +40,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardEvaluator\CardEval.cs" />
-    <Compile Include="Contracts\ICardEvaluator.cs" />
+    <Compile Include="CardEvaluator\CardEvaluatorFirsPlayer.cs" />
+    <Compile Include="CardEvaluator\CardEvaluatorSecondPlayer.cs" />
+    <Compile Include="CardEvaluator\ICardEval.cs" />
     <Compile Include="CardTracers\CardTracer.cs" />
     <Compile Include="Contracts\ICardTracer.cs" />
     <Compile Include="Contracts\IReport.cs" />

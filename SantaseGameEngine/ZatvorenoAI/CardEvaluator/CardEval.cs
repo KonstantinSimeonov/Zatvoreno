@@ -5,8 +5,9 @@
     using Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
+    using System.Collections.Generic;
 
-    public class CardEval : ICardEvaluator
+    public class CardEval : ICardEval
     {
         public const float PointValueParameter = 1;
         public const float TrickValueParameter = 1;
@@ -20,7 +21,7 @@
             this.cardTracer = ct;
         }
 
-        public float CardPlayabilityValue(Card card, PlayerTurnContext context)
+        public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
         {
             var value = 0f;
 
