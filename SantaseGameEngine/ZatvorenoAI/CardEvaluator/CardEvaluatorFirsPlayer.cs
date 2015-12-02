@@ -22,40 +22,15 @@
         public CardEvaluatorFirsPlayer(ICardTracer ct)
         {
             this.cardTracer = ct;
-            this.player = player;
         }
 
         public float CardScore (Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
         {
-            return this.PointsParameter(card) + this.RemaingSuitParamater(card, context)
-                + this.SuitParameter(card, context, allowedCards) + this.TrumpParameter(card,context);
-        }
+            var cardSuit = card.Suit;
+            var cardValue = card.GetValue();
+            var coutOfSuitInHand = allowedCards.Count(x => x.Suit == cardSuit);
 
-        private float PointsParameter(Card card)
-        {
-            return -card.GetValue() * this.pointValueMultiplier;
-        }
-
-        private float RemaingSuitParamater(Card card, PlayerTurnContext context)
-        {
-            var cardsRemaingFromTheSuit = 5 - this.cardTracer.PlayedCards.Count(x => x.Suit == card.Suit);
-            var s = cardsRemaingFromTheSuit * this.remaingMultiplier;
-            return s;
-
-        }
-
-        private float SuitParameter(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
-        {
-            var countOfSuit = allowedCards.Count(x => x.Suit == card.Suit);
-
-            return (float)countOfSuit / allowedCards.Count * this.suitCountMutiplier;
-        }
-
-        private float TrumpParameter(Card card, PlayerTurnContext context)
-        {
-            var x = card.Suit == context.TrumpCard.Suit ? 1 : 0;
-
-            return x * this.multy;
+            return (11 - cardValue) * coutOfSuitInHand;
         }
     }
 }

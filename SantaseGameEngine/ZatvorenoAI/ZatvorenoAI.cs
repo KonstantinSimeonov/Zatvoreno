@@ -55,7 +55,7 @@
             base.EndRound();
         }
 
-        public override PlayerAction GetTurn (PlayerTurnContext context)
+        public override PlayerAction GetTurn(PlayerTurnContext context)
         {
             var myPoints = GetMyPoints(context);
 
@@ -102,7 +102,7 @@
                     }
                 }
 
-                var card = cardsToPlay.OrderByDescending(c => Evaluator.CardScore(c, context, cardsToPlay)).First();
+                var card = cardsToPlay.OrderBy(c => Evaluator.CardScore(c, context, cardsToPlay)).First();
 
                 if (card != null)
                 {
