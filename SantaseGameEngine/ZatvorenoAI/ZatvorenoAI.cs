@@ -18,9 +18,11 @@
 
         private static readonly ICardTracer Tracer = new CardTracer();
 
+        private static readonly ICardTracker Tracker = new QuickSpecificCardSearchTracker();
+
         private static readonly ICardEval Evaluator = new CardEval(Tracer);
 
-        private static readonly ICardEval EvaluatorT = new CardEvaluatorFirsPlayer(Tracer);
+        private static readonly ICardEval Evaluator2 = new CardEvaluatorFirsPlayer(Tracker);
 
         public override string Name
         {
@@ -44,6 +46,7 @@
         public override void EndTurn (PlayerTurnContext context)
         {
             Tracer.TraceTurn(context);
+            Tracker.TraceTurn(context);
 
             base.EndTurn(context);
         }
@@ -110,12 +113,23 @@
                 }
             }
 
-            var cardToPlay = this.PlayCard(this
-                .PlayerActionValidator
-                .GetPossibleCardsToPlay(context, this.Cards)
-                .OrderBy(c => EvaluatorT.CardScore(c, context, cardsToPlay))
-                .First());
-
+            PlayerAction cardToPlay;
+            if (context.CardsLeftInDeck > 0)
+            {
+                cardToPlay = this.PlayCard(this
+                    .PlayerActionValidator
+                    .GetPossibleCardsToPlay(context, this.Cards)
+                    .OrderBy(c => Evaluator2.CardScore(c, context, cardsToPlay))
+                    .First());
+            }
+            else
+            {
+                cardToPlay = this.PlayCard(this
+                    .PlayerActionValidator
+                    .GetPossibleCardsToPlay(context, this.Cards)
+                    .OrderBy(c => Evaluator2.CardScore(c, context, cardsToPlay))
+                    .First());
+            }
             return cardToPlay;
         }
 

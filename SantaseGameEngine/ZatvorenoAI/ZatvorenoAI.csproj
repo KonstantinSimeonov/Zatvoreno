@@ -40,11 +40,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CardEvaluator\CardEval.cs" />
+    <Compile Include="CardEvaluator\CardEvaluatorWorthBased.cs" />
     <Compile Include="CardEvaluator\CardEvaluatorFirsPlayer.cs" />
     <Compile Include="CardEvaluator\CardEvaluatorSecondPlayer.cs" />
     <Compile Include="CardEvaluator\ICardEval.cs" />
     <Compile Include="CardTracers\CardTracer.cs" />
+    <Compile Include="CardTracers\CardTracerState.cs" />
+    <Compile Include="CardTracers\QuickSpecificCardSearchTracker.cs" />
     <Compile Include="Contracts\ICardTracer.cs" />
+    <Compile Include="Contracts\ICardTracker.cs" />
     <Compile Include="Contracts\IReport.cs" />
     <Compile Include="Reporters\Report.cs" />
     <Compile Include="ZatvorenoAI.cs" />

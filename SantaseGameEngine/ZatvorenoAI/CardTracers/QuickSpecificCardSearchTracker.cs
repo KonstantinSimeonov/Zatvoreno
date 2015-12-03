@@ -7,22 +7,22 @@
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 
-    public class QuickSpecificCardSearchTracker
+    public class QuickSpecificCardSearchTracker : ICardTracker
     {
-        private Dictionary<CardType, CardTracerState> clubs;
-        private Dictionary<CardType, CardTracerState> diamonds;
-        private Dictionary<CardType, CardTracerState> hearts;
-        private Dictionary<CardType, CardTracerState> spades;
+        private Dictionary<int, CardTracerState> clubs;
+        private Dictionary<int, CardTracerState> diamonds;
+        private Dictionary<int, CardTracerState> hearts;
+        private Dictionary<int, CardTracerState> spades;
 
         private Card lastTrump = null;
 
         public QuickSpecificCardSearchTracker()
         {
             // init fields
-            this.clubs = new Dictionary<CardType, CardTracerState>();
-            this.diamonds = new Dictionary<CardType, CardTracerState>();
-            this.hearts = new Dictionary<CardType, CardTracerState>();
-            this.spades = new Dictionary<CardType, CardTracerState>();
+            this.clubs = new Dictionary<int, CardTracerState>();
+            this.diamonds = new Dictionary<int, CardTracerState>();
+            this.hearts = new Dictionary<int, CardTracerState>();
+            this.spades = new Dictionary<int, CardTracerState>();
 
             // fill suits
             this.InitSuiteCollection(this.clubs);
@@ -31,7 +31,7 @@
             this.InitSuiteCollection(this.spades);
 
             // add to dictionary for easy access
-            this.AllCards = new Dictionary<CardSuit, Dictionary<CardType, CardTracerState>>();
+            this.AllCards = new Dictionary<CardSuit, Dictionary<int, CardTracerState>>();
             this.AllCards.Add(CardSuit.Club, this.clubs);
             this.AllCards.Add(CardSuit.Diamond, this.diamonds);
             this.AllCards.Add(CardSuit.Heart, this.hearts);
@@ -39,13 +39,18 @@
         }
 
         // Nali ne obi4ame switch
-        public Dictionary<CardSuit, Dictionary<CardType, CardTracerState>> AllCards { get; private set; }
+        public Dictionary<CardSuit, Dictionary<int, CardTracerState>> AllCards { get; private set; }
 
         // Needs to be optimized
-        public void TraceTurn(PlayerTurnContext context, ICollection<Card> playerHand)
+        public void TraceTurn(PlayerTurnContext context)
         {
+            if (context.SecondPlayedCard == null)
+            {
+                return;
+            }
+
             var isPlayerFirst = context.IsFirstPlayerTurn;
-            var hand = playerHand;
+            //var hand = playerHand;
             var firstCard = context.FirstPlayedCard;
             var secondCard = context.SecondPlayedCard;
             var trumpCard = context.TrumpCard;
@@ -60,10 +65,10 @@
             {
                 if (!isPlayerFirst)
                 {
-                    this.AllCards[this.lastTrump.Suit][this.lastTrump.Type] = CardTracerState.InOpponentHand;
+                    this.AllCards[this.lastTrump.Suit][this.lastTrump.GetValue()] = CardTracerState.InOpponentHand;
                 }
 
-                this.AllCards[trumpCard.Suit][trumpCard.Type] = CardTracerState.TrumpIndicator;
+                this.AllCards[trumpCard.Suit][trumpCard.GetValue()] = CardTracerState.TrumpIndicator;
             }
 
             // annouce
@@ -71,7 +76,7 @@
             {
                 if (context.FirstPlayerAnnounce != 0)
                 {
-                    var type = firstCard.Type == CardType.Queen ? CardType.King : CardType.Queen;
+                    var type = firstCard.Type == CardType.Queen ? 4 : 3;
                     this.AllCards[firstCard.Suit][type] = CardTracerState.InOpponentHand;
                 }
             }
@@ -97,18 +102,18 @@
             // taking
             if (isPlayerFirst && firstCardTake)
             {
-                this.AllCards[firstCard.Suit][firstCard.Type] = CardTracerState.TakenByPlayer;
-                this.AllCards[secondCard.Suit][secondCard.Type] = CardTracerState.TakenByPlayer;
+                this.AllCards[firstCard.Suit][firstCard.GetValue()] = CardTracerState.TakenByPlayer;
+                this.AllCards[secondCard.Suit][secondCard.GetValue()] = CardTracerState.TakenByPlayer;
             }
             else if (!isPlayerFirst && !firstCardTake)
             {
-                this.AllCards[firstCard.Suit][firstCard.Type] = CardTracerState.TakenByPlayer;
-                this.AllCards[secondCard.Suit][secondCard.Type] = CardTracerState.TakenByPlayer;
+                this.AllCards[firstCard.Suit][firstCard.GetValue()] = CardTracerState.TakenByPlayer;
+                this.AllCards[secondCard.Suit][secondCard.GetValue()] = CardTracerState.TakenByPlayer;
             }
             else
             {
-                this.AllCards[firstCard.Suit][firstCard.Type] = CardTracerState.TakenByOpponent;
-                this.AllCards[secondCard.Suit][secondCard.Type] = CardTracerState.TakenByOpponent;
+                this.AllCards[firstCard.Suit][firstCard.GetValue()] = CardTracerState.TakenByOpponent;
+                this.AllCards[secondCard.Suit][secondCard.GetValue()] = CardTracerState.TakenByOpponent;
             }
         }
 
@@ -123,14 +128,14 @@
             }
         }
 
-        private void InitSuiteCollection(Dictionary<CardType, CardTracerState> suit)
+        private void InitSuiteCollection(Dictionary<int, CardTracerState> suit)
         {
-            suit.Add(CardType.Ace, CardTracerState.Unknown);
-            suit.Add(CardType.King, CardTracerState.Unknown);
-            suit.Add(CardType.Queen, CardTracerState.Unknown);
-            suit.Add(CardType.Jack, CardTracerState.Unknown);
-            suit.Add(CardType.Ten, CardTracerState.Unknown);
-            suit.Add(CardType.Nine, CardTracerState.Unknown);
+            suit.Add(11, CardTracerState.Unknown);
+            suit.Add(4, CardTracerState.Unknown);
+            suit.Add(3, CardTracerState.Unknown);
+            suit.Add(2, CardTracerState.Unknown);
+            suit.Add(10, CardTracerState.Unknown);
+            suit.Add(0, CardTracerState.Unknown);
         }
     }
 }

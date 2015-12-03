@@ -1,36 +1,47 @@
 ﻿namespace ZatvorenoAI.CardEvaluator
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using CardTracers.CardStates;
 
     public class CardEvaluatorFirsPlayer : ICardEval
     {
-        private float pointValueMultiplier = 3.0f;
-        private float remaingMultiplier = 3f;
-        private float suitCountMutiplier = 2f;
-        private float multy = 2f;
+        private ICardTracker cardTracker;
 
-        private ICardTracer cardTracer;
-        private ZatvorenoAI player;
-
-        public CardEvaluatorFirsPlayer(ICardTracer ct)
+        public CardEvaluatorFirsPlayer(ICardTracker ct)
         {
-            this.cardTracer = ct;
+            this.cardTracker = ct;
         }
 
-        public float CardScore (Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
+        public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
+        {
+            float result = 0f;
+            result += this.PointAndSuitCountParameter(card, context, allowedCards);
+            result -= 0.5f * this.PointAndSuitCountParameter(card, context, allowedCards);
+
+            return result;
+        }
+
+        private float PointAndSuitCountParameter(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
         {
             var cardSuit = card.Suit;
-            var cardValue = card.GetValue();
-            var coutOfSuitInHand = allowedCards.Count(x => x.Suit == cardSuit);
+            float cardValue = card.GetValue();
+            float coutOfSuitInHand = allowedCards.Count(x => x.Suit == cardSuit);
+            return (11f - cardValue) * coutOfSuitInHand;
+        }
 
-            return (11 - cardValue) * coutOfSuitInHand;
+        private float BiggestGainParameter(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
+        {
+            var suit = card.Suit;
+            float value = card.GetValue();
+
+            var allOfSuit = this.cardTracker.AllCards[suit];
+            var maxAvailableForTaking = allOfSuit.Where(x => x.Value != CardTracerState.TakenByOpponent ||
+                                                            x.Value != CardTracerState.TakenByPlayer).Max(x => x.Key);
+            return (value + maxAvailableForTaking) / 21f;
         }
     }
 }
