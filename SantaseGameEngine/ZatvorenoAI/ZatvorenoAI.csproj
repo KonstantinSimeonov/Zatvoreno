@@ -53,8 +53,8 @@
     <Compile Include="Reporters\Report.cs" />
     <Compile Include="TakeStrategy\Agents\ChoseTake\ChoseTake.cs" />
     <Compile Include="TakeStrategy\Agents\ChoseTake\Contracts\IChoseTake.cs" />
-    <Compile Include="TakeStrategy\Agents\NeedToTake\Contracts\INeedToTake.cs" />
-    <Compile Include="TakeStrategy\Agents\NeedToTake\NeedToTake.cs" />
+    <Compile Include="TakeStrategy\Agents\ShouldTake\Contracts\IShouldTake.cs" />
+    <Compile Include="TakeStrategy\Agents\ShouldTake\ShouldTake.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\Contracts\IPossibleTakes.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\PossibleTakes.cs" />
     <Compile Include="TakeStrategy\Contracts\ITakeStrategy.cs" />
