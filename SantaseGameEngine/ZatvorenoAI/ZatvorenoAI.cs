@@ -32,18 +32,18 @@
             }
         }
 
-        public static string GetReports ()
+        public static string GetReports()
         {
             return GameReport.ToString();
         }
 
-        public override void StartRound (ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
+        public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
             Tracer.CurrentTrumpCard = trumpCard;
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
-        public override void EndTurn (PlayerTurnContext context)
+        public override void EndTurn(PlayerTurnContext context)
         {
             Tracer.TraceTurn(context);
             Tracker.TraceTurn(context);
@@ -51,7 +51,7 @@
             base.EndTurn(context);
         }
 
-        public override void EndRound ()
+        public override void EndRound()
         {
             Tracer.Empty();
 
@@ -114,31 +114,21 @@
             }
 
             PlayerAction cardToPlay;
-            if (context.CardsLeftInDeck > 0)
-            {
-                cardToPlay = this.PlayCard(this
+            cardToPlay = this.PlayCard(this
                     .PlayerActionValidator
                     .GetPossibleCardsToPlay(context, this.Cards)
                     .OrderBy(c => Evaluator2.CardScore(c, context, cardsToPlay))
                     .First());
-            }
-            else
-            {
-                cardToPlay = this.PlayCard(this
-                    .PlayerActionValidator
-                    .GetPossibleCardsToPlay(context, this.Cards)
-                    .OrderBy(c => Evaluator2.CardScore(c, context, cardsToPlay))
-                    .First());
-            }
+
             return cardToPlay;
         }
 
-        private static int GetMyPoints (PlayerTurnContext context)
+        private static int GetMyPoints(PlayerTurnContext context)
         {
             return context.IsFirstPlayerTurn ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints;
         }
 
-        public override void EndGame (bool amIWinner)
+        public override void EndGame(bool amIWinner)
         {
             if (amIWinner)
             {
@@ -148,7 +138,7 @@
             base.EndGame(amIWinner);
         }
 
-        private bool ShouldCloseGame (PlayerTurnContext context, ICollection<Card> cards)
+        private bool ShouldCloseGame(PlayerTurnContext context, ICollection<Card> cards)
         {
             throw new NotImplementedException("Implement close game");
 
