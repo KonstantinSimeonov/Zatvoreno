@@ -1,6 +1,8 @@
 ﻿namespace ZatvorenoAI.TakeStrategy
 {
-    public class TakeStartegy
+    using Contracts;
+
+    public class TakeStartegy : ITakeStrategy
     {
     }
 }
