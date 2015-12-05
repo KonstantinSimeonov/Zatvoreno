@@ -9,6 +9,7 @@
     using Reporters;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
+    using System.Diagnostics;
 
     public class ZatvorenoAI : BasePlayer
     {
@@ -72,21 +73,44 @@
 
             var cardsToPlay = this.PlayerActionValidator.GetPossibleCardsToPlay(context, this.Cards);
 
-            var announceCards = cardsToPlay
-                                    .Where(c => c.Type == CardType.King || c.Type == CardType.Queen)
-                                    .GroupBy(c => c.Suit)
-                                    .Where(g => g.Count() > 1)
-                                    .ToList();
-
-            var possibleCardsToPlay = this.AnnounceValidator.GetPossibleAnnounce(this.Cards, announceCards.FirstOrDefault() == null ? null : announceCards.FirstOrDefault().FirstOrDefault(), context.TrumpCard, context.IsFirstPlayerTurn);
-
-            if (possibleCardsToPlay == Santase.Logic.Announce.Forty || possibleCardsToPlay == Santase.Logic.Announce.Twenty)
+            if (context.IsFirstPlayerTurn)
             {
-                if (this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(announceCards.FirstOrDefault().First()), context, this.Cards))
+                var announceCards = cardsToPlay
+                                        .Where(c => c.Type == CardType.King || c.Type == CardType.Queen)
+                                        .GroupBy(c => c.Suit)
+                                        .Where(g => g.Count() > 1)
+                                        .ToList();
+
+                var fortyAnnounce = announceCards
+                    .Where(g => g.FirstOrDefault().Suit == context.TrumpCard.Suit)
+                    .Select(suit => suit.First(card => card.Type == CardType.Queen))
+                    .FirstOrDefault();
+
+                if (fortyAnnounce != null)
                 {
-                    GameReport.AnnounceStatistics[possibleCardsToPlay]++;
-                    return this.PlayCard(announceCards.FirstOrDefault().First());
+                    GameReport.AnnounceStatistics[Santase.Logic.Announce.Forty]++;
+                    return this.PlayCard(fortyAnnounce);
                 }
+                else if (announceCards.Count > 0)
+                {
+                    GameReport.AnnounceStatistics[Santase.Logic.Announce.Twenty]++;
+                    return this.PlayCard(announceCards.FirstOrDefault().FirstOrDefault(x => x.Type == CardType.Queen));
+                }
+
+                // var possibleCardsToPlay = this.AnnounceValidator
+                //     .GetPossibleAnnounce(this.Cards,
+                //         announceCards.FirstOrDefault() == null ? null : announceCards.FirstOrDefault().FirstOrDefault(),
+                //         context.TrumpCard,
+                //         context.IsFirstPlayerTurn);
+
+                // if (possibleCardsToPlay == Santase.Logic.Announce.Forty || possibleCardsToPlay == Santase.Logic.Announce.Twenty)
+                // {
+                //     if (this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(announceCards.FirstOrDefault().First()), context, this.Cards))
+                //     {
+                //         GameReport.AnnounceStatistics[possibleCardsToPlay]++;
+                //         return this.PlayCard(announceCards.FirstOrDefault().First());
+                //     }
+                // }
             }
 
             if (!context.IsFirstPlayerTurn)
