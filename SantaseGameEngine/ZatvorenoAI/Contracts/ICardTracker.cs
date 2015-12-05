@@ -1,9 +1,9 @@
 ﻿namespace ZatvorenoAI.Contracts
 {
     using System.Collections.Generic;
+    using CardTracers.CardStates;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using CardTracers.CardStates;
 
     public interface ICardTracker
     {
