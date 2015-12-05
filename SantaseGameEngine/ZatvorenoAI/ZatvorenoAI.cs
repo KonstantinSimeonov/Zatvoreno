@@ -17,11 +17,11 @@
     public class ZatvorenoAI : BasePlayer
     {
         // Utils
-        public static DetailedReport Report = new DetailedReport();
-
+        // public static IReport Report = new DetailedReport();
+        public static IReport report = new EmptyReport();
         private const string AIName = "Zatvoreno";
 
-        private static readonly IReport GameReport = new Report();
+        private static readonly ISummaryReport SummaryReport = new SummaryReport();
 
         // Deck tracers
         private static readonly ICardTracer Tracer = new CardTracer();
@@ -48,15 +48,15 @@
             }
         }
 
-        public static string GetReports()
-        {
-            return GameReport.ToString();
-        }
+        // public static string GetReports()
+        // {
+        //     return GameReport.ToString();
+        // }
 
         public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
             Tracer.CurrentTrumpCard = trumpCard;
-            Report.Add("Trump for current game is: " + trumpCard.ToString());
+            // report.Add("Trump for current game is: " + trumpCard.ToString());
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
@@ -64,7 +64,7 @@
         {
             Tracer.TraceTurn(context);
             Tracker.TraceTurn(context);
-            Report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
+            // report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
 
             base.EndTurn(context);
         }
@@ -74,8 +74,8 @@
             Tracer.Empty();
 
             // this.report.ToFile(string.Format("../../report{0}.txt", this.currentGameId));
-            //File.WriteAllText("../../report " + this.currentGameId++ + ".txt", this.report.ToString());
-            Report.Add(" ------ END ROUND ------");
+            // File.WriteAllText("../../report " + this.currentGameId++ + ".txt", this.report.ToString());
+            // report.Add(" ------ END ROUND ------");
             base.EndRound();
         }
 
@@ -87,7 +87,7 @@
 
             if (this.PlayerActionValidator.IsValid(PlayerAction.ChangeTrump(), context, this.Cards))
             {
-                GameReport.TrumpsChanged++;
+                SummaryReport.TrumpsChanged++;
                 return this.ChangeTrump(context.TrumpCard);
             }
 
@@ -111,12 +111,12 @@
 
                     if (fortyAnnounce != null)
                     {
-                        GameReport.AnnounceStatistics[Santase.Logic.Announce.Forty]++;
+                        SummaryReport.AnnounceStatistics[Santase.Logic.Announce.Forty]++;
                         return this.PlayCard(fortyAnnounce);
                     }
                     else if (announceCards.Count > 0)
                     {
-                        GameReport.AnnounceStatistics[Santase.Logic.Announce.Twenty]++;
+                        SummaryReport.AnnounceStatistics[Santase.Logic.Announce.Twenty]++;
                         return this.PlayCard(announceCards.FirstOrDefault().FirstOrDefault(x => x.Type == CardType.Queen));
                     }
                 // var possibleCardsToPlay = this.AnnounceValidator
@@ -210,7 +210,7 @@
         {
             if (amIWinner)
             {
-                ++GameReport.Wins;
+                ++SummaryReport.Wins;
             }
 
             this.currentGameId++;

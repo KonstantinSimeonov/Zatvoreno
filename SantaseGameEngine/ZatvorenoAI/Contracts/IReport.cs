@@ -3,7 +3,7 @@
     using System.Collections.Generic;
     using Santase.Logic;
 
-    public interface IReport
+    public interface ISummaryReport
     {
         int Wins { get; set; }
 

@@ -26,31 +26,31 @@
             // must take
             if (this.CheckHandForAnnounces())
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because Can Announce");
+                ZatvorenoAI.report.Add("Reason for taking: Because Can Announce");
                 return true;
             }
 
             if (this.OpponentWins(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because Opponent Would Win");
+                ZatvorenoAI.report.Add("Reason for taking: Because Opponent Would Win");
                 return true;
             }
 
             if (this.PlayerWins(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because I Win");
+                ZatvorenoAI.report.Add("Reason for taking: Because I Win");
                 return true;
             }
 
             if (this.OpponentPlaysTooHigh(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because Opponent Played Too High");
+                ZatvorenoAI.report.Add("Reason for taking: Because Opponent Played Too High");
                 return true;
             }
 
             if (this.HaveHigherCard(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because I Can!");
+                ZatvorenoAI.report.Add("Reason for taking: Because I Can!");
                 return true;
             }
 

@@ -20,8 +20,8 @@
                 game.Start(PlayerPosition.FirstPlayer);
                 if (i < 10)
                 {
-                    File.WriteAllText("../../report" + i + ".txt", ZatvorenoAI.Report.ToString());
-                    ZatvorenoAI.Report.Empty();
+                    File.WriteAllText("../../report" + i + ".txt", ZatvorenoAI.report.ToString());
+                    ZatvorenoAI.report.Empty();
                 }
 
                 if (i % ((length/20) + 1) == 0)
@@ -32,7 +32,7 @@
                 }
             }
 
-            Console.WriteLine(ZatvorenoAI.GetReports());
+            // Console.WriteLine(ZatvorenoAI.GetReports());
 
             // Console.WriteLine(ZatvorenoAI.WinRate);
         }

@@ -4,7 +4,7 @@
     using System.IO;
     using System.Text;
 
-    public class DetailedReport
+    public class DetailedReport : IReport
     {
         public StringBuilder Content { get; private set; }
 
@@ -13,13 +13,13 @@
             this.Content = new StringBuilder();
         }
 
-        public DetailedReport Add(string info)
+        public IReport Add(string info)
         {
             this.Content.AppendLine(info);
             return this;
         }
 
-        public DetailedReport Empty()
+        public IReport Empty()
         {
             this.Content.Clear();
             return this;

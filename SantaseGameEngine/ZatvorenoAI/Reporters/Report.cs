@@ -5,11 +5,11 @@
     using Contracts;
     using Santase.Logic;
 
-    public class Report : IReport
+    public class SummaryReport : ISummaryReport
     {
         private const string ReportFormat = "Games won: {1}{0}Trumps changes: {2}{0}Trumped aces and tens: {3}{0}Announces:{0}  - Forty: {4}{0}  - Twenty: {5}{0}";
 
-        public Report()
+        public SummaryReport()
         {
             this.Wins = 0;
             this.TrumpsChanged = 0;
