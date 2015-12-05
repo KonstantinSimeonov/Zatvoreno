@@ -9,6 +9,8 @@
     using Reporters;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
+    using System.IO;
+    
 
     public class ZatvorenoAI : BasePlayer
     {
@@ -23,6 +25,12 @@
         private static readonly ICardEval Evaluator = new CardEval(Tracer);
 
         private static readonly ICardEval Evaluator2 = new CardEvaluatorFirsPlayer(Tracker);
+
+        public DetailedReport report = new DetailedReport();
+
+        private bool myTurn = false;
+
+        private int currentGameId = 0;
 
         public override string Name
         {
@@ -40,6 +48,7 @@
         public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
             Tracer.CurrentTrumpCard = trumpCard;
+            this.report.Add("Trump for current game is: " + trumpCard.ToString());
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
@@ -47,6 +56,7 @@
         {
             Tracer.TraceTurn(context);
             Tracker.TraceTurn(context);
+            this.report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
 
             base.EndTurn(context);
         }
@@ -55,11 +65,16 @@
         {
             Tracer.Empty();
 
+            // this.report.ToFile(string.Format("../../report{0}.txt", this.currentGameId));
+            //File.WriteAllText("../../report " + this.currentGameId++ + ".txt", this.report.ToString());
+            this.report.Add(" ------ END ROUND ------");
             base.EndRound();
         }
 
         public override PlayerAction GetTurn(PlayerTurnContext context)
         {
+            this.myTurn = context.IsFirstPlayerTurn;
+
             var myPoints = GetMyPoints(context);
 
             if (this.PlayerActionValidator.IsValid(PlayerAction.ChangeTrump(), context, this.Cards))
@@ -134,6 +149,8 @@
             {
                 ++GameReport.Wins;
             }
+
+            this.currentGameId++;
 
             base.EndGame(amIWinner);
         }

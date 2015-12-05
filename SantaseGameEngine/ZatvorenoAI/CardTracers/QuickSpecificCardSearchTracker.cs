@@ -39,9 +39,11 @@
         }
 
         // Nali ne obi4ame switch
+        // ne obichame, prafsi
         public Dictionary<CardSuit, Dictionary<int, CardTracerState>> AllCards { get; private set; }
 
         // Needs to be optimized
+        // no
         public void TraceTurn(PlayerTurnContext context)
         {
             if (context.SecondPlayedCard == null)
