@@ -8,20 +8,22 @@
     using Santase.Logic.GameMechanics;
     using Santase.Logic.Players;
     using ZatvorenoAI;
-
-
+    
     public static class Program
     {
-        static ZatvorenoAI me;
         public static void Main()
         {
 
-            for (int i = 0, length = 10; i < length; i++)
+            for (int i = 0, length = 10000; i < length; i++)
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);
-                File.WriteAllText("../../report" + i + ".txt", me.report.ToString());
-                me.report.Empty();
+                if (i < 10)
+                {
+                    File.WriteAllText("../../report" + i + ".txt", ZatvorenoAI.Report.ToString());
+                    ZatvorenoAI.Report.Empty();
+                }
+
                 if (i % ((length/20) + 1) == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -54,7 +56,6 @@
             Console.BufferWidth = Console.WindowWidth = 50;
 
             IPlayer firstPlayer = new ZatvorenoAI();
-            me = (ZatvorenoAI)firstPlayer;
             IPlayer secondPlayer = new SmartPlayer();
             ISantaseGame game = new SantaseGame(firstPlayer, secondPlayer);
             return game;

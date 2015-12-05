@@ -1,5 +1,6 @@
 ﻿namespace ZatvorenoAI.TakeStrategy.Agents.NeedToTake
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using CardTracers.CardStates;
@@ -19,25 +20,83 @@
 
         public bool ShouldPlayerTake(PlayerTurnContext context, ICollection<Card> hand)
         {
-            var shouldTake = false;
+            // Inlining unused var.
+            // var shouldTake = false;
 
             // must take
             if (this.CheckHandForAnnounces())
             {
+                ZatvorenoAI.Report.Add("Reason for taking: Because Can Announce");
                 return true;
             }
 
             if (this.OpponentWins(context, hand))
             {
+                ZatvorenoAI.Report.Add("Reason for taking: Because Opponent Would Win");
                 return true;
             }
 
             if (this.PlayerWins(context, hand))
             {
+                ZatvorenoAI.Report.Add("Reason for taking: Because I Win");
+                return true;
+            }
+
+            if (this.OpponentPlaysTooHigh(context, hand))
+            {
+                ZatvorenoAI.Report.Add("Reason for taking: Because Opponent Played Too High");
+                return true;
+            }
+
+            if (this.HaveHigherCard(context, hand))
+            {
+                ZatvorenoAI.Report.Add("Reason for taking: Because I Can!");
                 return true;
             }
 
             // TODO:  should it take depending on possible takes
+            return false; // shouldTake;
+        }
+
+        private bool HaveHigherCard(PlayerTurnContext context, ICollection<Card> hand)
+        {
+            if (context.FirstPlayedCard.Suit == context.TrumpCard.Suit) // TODO: Improve this.
+            {
+                if (context.FirstPlayedCard.Type == CardType.Ten && // TODO: Maybe separate in another agent.
+                    hand.Any(c => c.Type == CardType.Ace && c.Suit == context.TrumpCard.Suit))
+                {
+                    return true;
+                }
+
+                return false;
+            }
+
+            var shouldTake = hand.Any(c => c.Suit == context.FirstPlayedCard.Suit &&
+                                           c.GetValue() > context.FirstPlayedCard.GetValue());
+
+            return shouldTake;
+        }
+
+        private bool OpponentPlaysTooHigh(PlayerTurnContext context, ICollection<Card> hand)
+        {
+            var shouldTake = false;
+
+            if (context.FirstPlayedCard.Type == CardType.Ace ||
+                context.FirstPlayedCard.Type == CardType.Ten)
+            {
+                var trumpSuit = this.cardTracker
+                                    .AllCards[context.TrumpCard.Suit];
+
+                foreach (var card in trumpSuit)
+                {
+                    if ((card.Key != 3 && card.Key != 4) && card.Value == CardTracerState.InHand)
+                    {
+                        shouldTake = true;
+                        break;
+                    }
+                }
+            }
+
             return shouldTake;
         }
 
@@ -62,14 +121,20 @@
 
         private bool OpponentWins(PlayerTurnContext context, ICollection<Card> hand)
         {
+
             var opponetWinsWithHand = false;
 
             var opponetPoints = context.FirstPlayerRoundPoints;
             var oppnetCard = context.FirstPlayedCard.GetValue();
 
-            var smallestCard = hand.Where(x => x.Suit != context.TrumpCard.Suit).Min(x => x.GetValue());
+            var smallestCard = hand.Where(x => x.Suit != context.TrumpCard.Suit).OrderBy(x => x.GetValue()).FirstOrDefault();
 
-            if (opponetPoints + smallestCard + oppnetCard >= 66)
+            if (smallestCard == null)
+            {
+                smallestCard = hand.OrderBy(x => x.GetValue()).First();
+            }
+
+            if (opponetPoints + smallestCard.GetValue() + oppnetCard >= 66)
             {
                 opponetWinsWithHand = true;
             }
@@ -86,13 +151,12 @@
 
             var playedCardIsTrump = playedCard.Suit == context.TrumpCard.Suit;
 
-
             var canTake = hand.Where(x => (x.Suit == playedCard.Suit ||
                                     (playedCard.Suit != context.TrumpCard.Suit
                                     && x.Suit == context.TrumpCard.Suit))
                                     && x.GetValue() > playedCard.GetValue())
                               .OrderByDescending(x => x.GetValue())
-                              .First();
+                              .FirstOrDefault();
 
             if (canTake == null)
             {
@@ -103,7 +167,6 @@
             {
                 playerWinsWithHand = true;
             }
-
 
             return playerWinsWithHand;
         }
