@@ -1,6 +1,7 @@
 ﻿namespace Santase.UI.Console
 {
     using System;
+    using System.IO;
     using AI.DummyPlayer;
     using Santase.AI.SmartPlayer;
     using Santase.Logic;
@@ -8,17 +9,19 @@
     using Santase.Logic.Players;
     using ZatvorenoAI;
 
-    
+
     public static class Program
     {
         static ZatvorenoAI me;
         public static void Main()
         {
 
-            for (int i = 0, length = 10000; i < length; i++)
+            for (int i = 0, length = 10; i < length; i++)
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);
+                File.WriteAllText("../../report" + i + ".txt", me.report.ToString());
+                me.report.Empty();
                 if (i % ((length/20) + 1) == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
