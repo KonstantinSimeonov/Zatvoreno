@@ -36,11 +36,21 @@
             this.AllCards.Add(CardSuit.Diamond, this.diamonds);
             this.AllCards.Add(CardSuit.Heart, this.hearts);
             this.AllCards.Add(CardSuit.Spade, this.spades);
+
+            //instatntiate take collections
+
+            this.PlayerTookWith = new List<Card>();
+            this.OpponentTookWith = new List<Card>();
         }
 
         // Nali ne obi4ame switch
         // ne obichame, prafsi
         public Dictionary<CardSuit, Dictionary<int, CardTracerState>> AllCards { get; private set; }
+
+        public IList<Card> PlayerTookWith { get; private set; }
+
+        public IList<Card> OpponentTookWith { get; private set; }
+
 
         // Needs to be optimized
         // no
@@ -128,6 +138,8 @@
                     suit.Value[card.Key] = CardTracerState.Unknown;
                 }
             }
+            this.OpponentTookWith.Clear();
+            this.PlayerTookWith.Clear();
         }
 
         private void InitSuiteCollection(Dictionary<int, CardTracerState> suit)

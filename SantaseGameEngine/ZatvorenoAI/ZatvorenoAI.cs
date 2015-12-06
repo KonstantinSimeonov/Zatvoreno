@@ -12,6 +12,10 @@
     using Santase.Logic.Players;
     using TakeStrategy.Agents.NeedToTake;
     using TakeStrategy.Agents.NeedToTake.Contracts;
+    using TakeStrategy.Agents.PossibleTakes.Contracts;
+    using TakeStrategy.Agents.PossibleTakes;
+    using TakeStrategy.Agents.ChoseTake.Contracts;
+    using TakeStrategy.Agents.ChoseTake;
 
     public class ZatvorenoAI : BasePlayer
     {
@@ -34,11 +38,17 @@
 
         private static readonly IShouldTake TrickDecisionMakerWhenSecond = new ShouldTake(Tracker);
 
+        private static readonly IPossibleActions PossibleActionGenerator = new PossibleActions(Tracker);
+
+        private static readonly IChoseAction ActionChoser = new ChoseAction(PossibleActionGenerator, TrickDecisionMakerWhenSecond);
+
         public ZatvorenoAI()
         {
             report = true ?
                             (IReport)new DetailedReport() :
                             (IReport)new EmptyReport();
+
+
         }
 
         // Logic
