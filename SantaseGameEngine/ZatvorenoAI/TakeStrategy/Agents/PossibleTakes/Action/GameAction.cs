@@ -16,11 +16,17 @@
             this.PlayerTakes = this.CheckIfPlayerTakes(opponent, player, context);
             this.HandValue = opponent.GetValue() + player.GetValue();
             this.CardMaxWorth = this.CardMaxWorthCalculator(player, cardTracker);
+            this.OpponentPoints = context.FirstPlayerRoundPoints;
+            this.PlayerPoints = context.SecondPlayerRoundPoints;
         }
 
         public Card OpponetCard { get; private set; }
 
         public Card PlayerCard { get; private set; }
+
+        public int OpponentPoints { get; set; }
+
+        public int PlayerPoints { get; set; }
 
         public bool PlayerTakes { get; private set; }
 
