@@ -2,7 +2,7 @@
 {
     using Contracts;
 
-    public class ChoseTake : IChoseTake
+    public class ChoseAction : IChoseAction
     {
     }
 }
