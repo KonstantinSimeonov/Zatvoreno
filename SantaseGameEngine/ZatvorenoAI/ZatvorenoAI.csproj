@@ -53,6 +53,14 @@
     <Compile Include="Contracts\IReport.cs" />
     <Compile Include="MCTS\EndGameDecisionMaker.cs" />
     <Compile Include="MCTS\MCSTNode.cs" />
+    <Compile Include="PlayFirstStrategy\ActionChoser\Contracts\IFistActionInTrickChoser.cs" />
+    <Compile Include="PlayFirstStrategy\ActionChoser\FistActionInTrickChoser.cs" />
+    <Compile Include="PlayFirstStrategy\CardStatistics\CardStaistic\CardStatistic.cs" />
+    <Compile Include="PlayFirstStrategy\CardStatistics\CardStatisticsGenerator.cs" />
+    <Compile Include="PlayFirstStrategy\CardStatistics\Contracts\ICardStatisticsGenerator.cs" />
+    <Compile Include="PlayFirstStrategy\TurnContext\Contracts\IOptionEvaluator.cs" />
+    <Compile Include="PlayFirstStrategy\TurnContext\OptionEvaluator.cs" />
+    <Compile Include="PlayFirstStrategy\TurnContext\Response\OptionsEvaluationResponse.cs" />
     <Compile Include="Reporters\ContextExtensions.cs" />
     <Compile Include="Reporters\DetailedReport.cs" />
     <Compile Include="Reporters\EmptyReport.cs" />
