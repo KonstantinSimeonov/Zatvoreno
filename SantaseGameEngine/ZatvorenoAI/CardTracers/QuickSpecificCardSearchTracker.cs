@@ -54,7 +54,7 @@
 
         // Needs to be optimized
         // no
-        public void TraceTurn(PlayerTurnContext context)
+        public void TrickResolution(PlayerTurnContext context)
         {
             if (context.SecondPlayedCard == null)
             {
@@ -129,7 +129,7 @@
             }
         }
 
-        public void NewGame()
+        public void NewGame(Card cardTrump)
         {
             foreach (var suit in this.AllCards)
             {
@@ -138,6 +138,7 @@
                     suit.Value[card.Key] = CardTracerState.Unknown;
                 }
             }
+
             this.OpponentTookWith.Clear();
             this.PlayerTookWith.Clear();
         }

@@ -26,13 +26,7 @@
 
         private static readonly ISummaryReport SummaryReport = new SummaryReport();
 
-        // Deck tracers
-        private static readonly ICardTracer Tracer = new CardTracer();
-
         private static readonly ICardTracker Tracker = new QuickSpecificCardSearchTracker();
-
-        // Card evaluation and decision makers
-        private static readonly ICardEval Evaluator = new CardEval(Tracer);
 
         private static readonly ICardEval Evaluator2 = new CardEvaluatorFirstPlayer(Tracker);
 
@@ -71,16 +65,13 @@
 
         public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
-            Tracer.CurrentTrumpCard = trumpCard;
-
             report.Add("Trump for current game is: " + trumpCard.ToString());
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
         public override void EndTurn(PlayerTurnContext context)
         {
-            Tracer.TraceTurn(context);
-            Tracker.TraceTurn(context);
+            Tracker.TrickResolution(context);
 
             report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
             base.EndTurn(context);
@@ -88,10 +79,6 @@
 
         public override void EndRound()
         {
-            Tracer.Empty();
-
-            // this.report.ToFile(string.Format("../../report{0}.txt", this.currentGameId));
-            // File.WriteAllText("../../report " + this.currentGameId++ + ".txt", this.report.ToString());
             report.Add(" ------ END ROUND ------");
             base.EndRound();
         }

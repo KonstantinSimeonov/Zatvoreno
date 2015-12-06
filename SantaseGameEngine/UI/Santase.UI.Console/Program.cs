@@ -17,7 +17,7 @@
             var sw = new Stopwatch();
 
             sw.Start();
-            for (int i = 0, length = 1000; i < length; i++)
+            for (int i = 0, length = 10000; i < length; i++)
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);

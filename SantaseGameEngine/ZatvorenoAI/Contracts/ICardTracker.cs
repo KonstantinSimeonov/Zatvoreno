@@ -9,8 +9,8 @@
     {
         Dictionary<CardSuit, Dictionary<int, CardTracerState>> AllCards { get; }
 
-        void TraceTurn(PlayerTurnContext context);
+        void TrickResolution(PlayerTurnContext context);
 
-        void NewGame();
+        void NewGame(Card trumpCard);
     }
 }

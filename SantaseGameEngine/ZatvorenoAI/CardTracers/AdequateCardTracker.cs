@@ -42,13 +42,13 @@
 
         public void TrickResolution(PlayerTurnContext context)
         {
-            this.AllCards[context.FirstPlayedCard.Suit][context.FirstPlayedCard.GetValue()] = CardTracerState.Played;
-            if (context.SecondPlayedCard == null)
-            {
-                return;
-            }
+            //this.AllCards[context.FirstPlayedCard.Suit][context.FirstPlayedCard.GetValue()] = CardTracerState.Played;
+            //if (context.SecondPlayedCard == null)
+            //{
+            //    return;
+            //}
 
-            this.AllCards[context.SecondPlayedCard.Suit][context.SecondPlayedCard.GetValue()] = CardTracerState.Played;
+            //this.AllCards[context.SecondPlayedCard.Suit][context.SecondPlayedCard.GetValue()] = CardTracerState.Played;
 
             if (this.LastTrump == null)
             {
