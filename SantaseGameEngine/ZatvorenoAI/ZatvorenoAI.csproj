@@ -45,6 +45,7 @@
     <Compile Include="CardEvaluator\CardEvaluatorSecondPlayer.cs" />
     <Compile Include="CardEvaluator\ICardEval.cs" />
     <Compile Include="CardTracers\AdequateCardTracker.cs" />
+    <Compile Include="CardTracers\CardTracer.cs" />
     <Compile Include="CardTracers\CardTracerState.cs" />
     <Compile Include="CardTracers\QuickSpecificCardSearchTracker.cs" />
     <Compile Include="Contracts\ICardTracer.cs" />
