@@ -50,6 +50,8 @@
     <Compile Include="Contracts\ICardTracer.cs" />
     <Compile Include="Contracts\ICardTracker.cs" />
     <Compile Include="Contracts\IReport.cs" />
+    <Compile Include="MCTS\EndGameDecisionMaker.cs" />
+    <Compile Include="MCTS\MCSTNode.cs" />
     <Compile Include="Reporters\ContextExtensions.cs" />
     <Compile Include="Reporters\DetailedReport.cs" />
     <Compile Include="Reporters\EmptyReport.cs" />
