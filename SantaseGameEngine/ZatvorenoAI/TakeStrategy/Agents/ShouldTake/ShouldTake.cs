@@ -83,19 +83,13 @@
         {
             var shouldTake = false;
 
-            if (context.FirstPlayedCard.Type == CardType.Ace ||
-                context.FirstPlayedCard.Type == CardType.Ten)
+            if ((context.FirstPlayedCard.Type == CardType.Ace ||
+                context.FirstPlayedCard.Type == CardType.Ten) &&
+                context.FirstPlayedCard.Suit != context.TrumpCard.Suit)
             {
-                var trumpSuit = this.cardTracker
-                                    .AllCards[context.TrumpCard.Suit];
-
-                foreach (var card in trumpSuit)
+                if (hand.Any(c => c.Suit == context.TrumpCard.Suit))
                 {
-                    if ((card.Key != 3 && card.Key != 4) && card.Value == CardTracerState.InHand)
-                    {
-                        shouldTake = true;
-                        break;
-                    }
+                    shouldTake = true;
                 }
             }
 

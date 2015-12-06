@@ -81,6 +81,12 @@
                 return take.First(x => x.HandValue == value).PlayerCard;
             }
 
+            if (response.OpponentHighCard)
+            {
+                var trumpCard = hand.Where(c => c.Suit == context.TrumpCard.Suit).OrderByDescending(c => c.GetValue()).First();
+                return trumpCard;
+            }
+
             if (context.State.ShouldObserveRules)
             {
                 var cardsToReturn = gameActions
