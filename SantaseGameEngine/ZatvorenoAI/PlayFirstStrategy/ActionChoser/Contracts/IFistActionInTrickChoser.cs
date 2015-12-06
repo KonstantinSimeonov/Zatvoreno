@@ -1,12 +1,12 @@
 ﻿namespace ZatvorenoAI.PlayFirstStrategy.ActionChoser.Contracts
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    using Santase.Logic.Cards;
+    using TurnContext.Response;
 
     public interface IFistActionInTrickChoser
     {
+        KeyValuePair<bool, Card> CardToPlayAndCloseLogic(OptionsEvaluationResponse evaluatedOption);
     }
 }
