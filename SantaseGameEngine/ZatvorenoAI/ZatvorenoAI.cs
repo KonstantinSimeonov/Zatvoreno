@@ -98,27 +98,28 @@
             if (context.IsFirstPlayerTurn &&
                 context.CardsLeftInDeck != 12)
             {
-                    var announceCards = availableCardsFromHand
-                                            .Where(c => c.Type == CardType.King || c.Type == CardType.Queen)
-                                            .GroupBy(c => c.Suit)
-                                            .Where(g => g.Count() > 1)
-                                            .ToList();
+                var announceCards = availableCardsFromHand
+                                        .Where(c => c.Type == CardType.King || c.Type == CardType.Queen)
+                                        .GroupBy(c => c.Suit)
+                                        .Where(g => g.Count() > 1)
+                                        .ToList();
 
-                    var fortyAnnounce = announceCards
-                        .Where(g => g.FirstOrDefault().Suit == context.TrumpCard.Suit)
-                        .Select(suit => suit.First(card => card.Type == CardType.Queen))
-                        .FirstOrDefault();
+                var fortyAnnounce = announceCards
+                    .Where(g => g.FirstOrDefault().Suit == context.TrumpCard.Suit)
+                    .Select(suit => suit.First(card => card.Type == CardType.Queen))
+                    .FirstOrDefault();
 
-                    if (fortyAnnounce != null)
-                    {
-                        SummaryReport.AnnounceStatistics[Santase.Logic.Announce.Forty]++;
-                        return this.PlayCard(fortyAnnounce);
-                    }
-                    else if (announceCards.Count > 0)
-                    {
-                        SummaryReport.AnnounceStatistics[Santase.Logic.Announce.Twenty]++;
-                        return this.PlayCard(announceCards.FirstOrDefault().FirstOrDefault(x => x.Type == CardType.Queen));
-                    }
+                if (fortyAnnounce != null)
+                {
+                    SummaryReport.AnnounceStatistics[Santase.Logic.Announce.Forty]++;
+                    return this.PlayCard(fortyAnnounce);
+                }
+                else if (announceCards.Count > 0)
+                {
+                    SummaryReport.AnnounceStatistics[Santase.Logic.Announce.Twenty]++;
+                    return this.PlayCard(announceCards.FirstOrDefault().FirstOrDefault(x => x.Type == CardType.Queen));
+                }
+
                 // var possibleCardsToPlay = this.AnnounceValidator
                 //     .GetPossibleAnnounce(this.Cards,
                 //         announceCards.FirstOrDefault() == null ? null : announceCards.FirstOrDefault().FirstOrDefault(),
@@ -197,9 +198,8 @@
             }
 
             PlayerAction cardToPlay;
-            cardToPlay = this.PlayCard(this
-                    .PlayerActionValidator
-                    .GetPossibleCardsToPlay(context, this.Cards)
+            cardToPlay = this.PlayCard(
+                    availableCardsFromHand
                     .OrderBy(c => Evaluator2.CardScore(c, context, availableCardsFromHand))
                     .First());
 
