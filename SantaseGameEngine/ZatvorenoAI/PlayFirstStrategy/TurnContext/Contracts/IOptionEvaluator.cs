@@ -1,12 +1,13 @@
 ﻿namespace ZatvorenoAI.PlayFirstStrategy.TurnContext.Contracts
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+
+    using Response;
+    using Santase.Logic.Cards;
+    using Santase.Logic.Players;
 
     public interface IOptionEvaluator
     {
+        OptionsEvaluationResponse EvaluateSituation(PlayerTurnContext context, ICollection<Card> hand);
     }
 }
