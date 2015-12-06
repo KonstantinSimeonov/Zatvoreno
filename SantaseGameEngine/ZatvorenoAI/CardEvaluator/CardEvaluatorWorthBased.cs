@@ -1,8 +1,8 @@
 ﻿namespace ZatvorenoAI.CardEvaluator
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CardTracers.CardStates;
     using Contracts;
     using Santase.Logic.Cards;
@@ -19,7 +19,7 @@
 
         public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
         {
-            return 0;
+            return this.CurrentCardWorth(card, context, allowedCards);
         }
 
         private float CurrentCardWorth(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
@@ -34,7 +34,7 @@
             }
             else if (cardValue == 3 || cardValue == 4)
             {
-                result = this.QueenKingEvaliation(card, context, allowedCards);
+                result = this.QueenKingEvaluation(card, context, allowedCards);
             }
             else
             {
@@ -48,6 +48,11 @@
         {
             var isTrump = nine.Suit == context.TrumpCard.Suit;
 
+            if (isTrump && context.State.ShouldObserveRules)
+            {
+                return 10; // TODO: 0 + trumpModifier
+            }
+
             if (isTrump)
             {
                 return context.TrumpCard.GetValue();
@@ -56,12 +61,12 @@
             return 0f;
         }
 
-        private float QueenKingEvaliation(Card card, PlayerTurnContext context, ICollection<Card> hand)
+        private float QueenKingEvaluation(Card card, PlayerTurnContext context, ICollection<Card> hand)
         {
             var result = 0f;
             var value = card.GetValue();
             var valueOfCounterPart = value == 4 ? 3 : 4;
-            var anouceValue = card.Suit == context.TrumpCard.Suit ? 40f : 20f;
+            var announceValue = card.Suit == context.TrumpCard.Suit ? 40f : 20f;
 
             var suit = card.Suit;
 
@@ -72,11 +77,11 @@
 
             if (havePair)
             {
-                result = anouceValue + value;
+                result = announceValue + value;
             }
             else if (pairIsPossible)
             {
-                result = (anouceValue / 2f) + value;
+                result = (announceValue / 2f) + value;
             }
             else
             {
@@ -94,8 +99,20 @@
 
             var result = 0f;
 
-            var cardsToTake = this.cardTracker.AllCards[suit].Where(x => x.Key < value &&
-                                (x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown));
+            var cardsToTake = this.cardTracker
+                .AllCards[suit]
+                .Where(x => x.Key < value &&
+                    (x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown));
+
+            if (isTrump)
+            {
+                cardsToTake.ToList()
+                    .AddRange(this.cardTracker
+                        .AllCards
+                        .Where(s => s.Key != suit)
+                        .SelectMany(c => c.Value)
+                        .Where(x => x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown));
+            }
 
             var high = cardsToTake.Max(x => x.Key);
 
@@ -106,38 +123,18 @@
                 result += 10;
             }
 
-            return 5f*result /(this.MaxTakes(value) - cardsToTake.Count());
+            return /*5f **/ result / (this.MaxTakeCases(value, suit) - cardsToTake.Count());
         }
 
-        private int MaxTakes(int point)
+        private int MaxTakeCases(int cardValue, CardSuit suit)
         {
-            int possibleHands = 0;
+            var takeCases = this.cardTracker
+                .AllCards[suit]
+                .Where(c => c.Key < cardValue &&
+                            (c.Value == CardTracerState.Unknown || c.Value == CardTracerState.InOpponentHand))
+                .Count();
 
-            switch (point)
-            {
-                case 0:
-                    possibleHands = 0;
-                    break;
-                case 2:
-                    possibleHands = 1;
-                    break;
-                case 3:
-                    possibleHands = 2;
-                    break;
-                case 4:
-                    possibleHands = 3;
-                    break;
-                case 10:
-                    possibleHands = 4;
-                    break;
-                case 11:
-                    possibleHands = 5;
-                    break;
-                default:
-                    throw new ArgumentException("Wrong card point value");
-            }
-
-            return possibleHands;
+            return takeCases;
         }
     }
 }

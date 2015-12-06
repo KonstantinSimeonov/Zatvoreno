@@ -3,22 +3,22 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using CardEvaluator;
     using CardTracers;
     using Contracts;
-    using CardEvaluator;
     using Reporters;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using System.IO;
-    using TakeStrategy.Agents.NeedToTake.Contracts;
     using TakeStrategy.Agents.NeedToTake;
-    using CardTracers.CardStates;
+    using TakeStrategy.Agents.NeedToTake.Contracts;
 
     public class ZatvorenoAI : BasePlayer
     {
         // Utils
         // public static IReport Report = new DetailedReport();
         public static IReport report = new EmptyReport();
+
         private const string AIName = "Zatvoreno";
 
         private static readonly ISummaryReport SummaryReport = new SummaryReport();
@@ -48,14 +48,15 @@
             }
         }
 
-        // public static string GetReports()
-        // {
-        //     return GameReport.ToString();
-        // }
+        public static string GetReports()
+        {
+            return SummaryReport.ToString();
+        }
 
         public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
             Tracer.CurrentTrumpCard = trumpCard;
+
             // report.Add("Trump for current game is: " + trumpCard.ToString());
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
@@ -64,8 +65,8 @@
         {
             Tracer.TraceTurn(context);
             Tracker.TraceTurn(context);
-            // report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
 
+            // report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
             base.EndTurn(context);
         }
 
@@ -119,31 +120,15 @@
                     SummaryReport.AnnounceStatistics[Santase.Logic.Announce.Twenty]++;
                     return this.PlayCard(announceCards.FirstOrDefault().FirstOrDefault(x => x.Type == CardType.Queen));
                 }
-
-                // var possibleCardsToPlay = this.AnnounceValidator
-                //     .GetPossibleAnnounce(this.Cards,
-                //         announceCards.FirstOrDefault() == null ? null : announceCards.FirstOrDefault().FirstOrDefault(),
-                //         context.TrumpCard,
-                //         context.IsFirstPlayerTurn);
-
-                // if (possibleCardsToPlay == Santase.Logic.Announce.Forty || possibleCardsToPlay == Santase.Logic.Announce.Twenty)
-                // {
-                //     if (this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(announceCards.FirstOrDefault().First()), context, this.Cards))
-                //     {
-                //         GameReport.AnnounceStatistics[possibleCardsToPlay]++;
-                //         return this.PlayCard(announceCards.FirstOrDefault().First());
-                //     }
-                // }
             }
 
             if (!context.IsFirstPlayerTurn)
             {
-                var shouldTake = TrickDecisionMakerWhenSecond.ShouldPlayerTake(context, this.Cards);
+                var shouldTake = TrickDecisionMakerWhenSecond.ShouldPlayerTake(context, availableCardsFromHand);
 
                 if (shouldTake)
                 {
                     // to extract taking agents.
-                    // Should separate logic for following suit.
                     var viableCards = availableCardsFromHand
                         .Where(c => (c.Suit == context.FirstPlayedCard.Suit &&
                         c.GetValue() > context.FirstPlayedCard.GetValue()) ||
@@ -170,31 +155,8 @@
                     }
                 }
 
-                // var minorCardWhenCannotTake = availableCardsFromHand.OrderBy(c => c.GetValue()).First();
                 var card = availableCardsFromHand.OrderBy(c => Evaluator.CardScore(c, context, availableCardsFromHand)).First();
-
-                // return this.PlayCard(minorCardWhenCannotTake);
                 return this.PlayCard(card);
-
-                // if (context.FirstPlayedCard.Type == CardType.Ace || context.FirstPlayedCard.Type == CardType.Ten)
-                // {
-                //     if (context.TrumpCard.Suit != context.FirstPlayedCard.Suit)
-                //     {
-                //         var trump = cardsToPlay.Where(x => x.Suit == context.TrumpCard.Suit).OrderBy(x => x.GetValue()).FirstOrDefault();
-                //         if (trump != null && this.PlayerActionValidator.IsValid(PlayerAction.PlayCard(trump), context, this.Cards))
-                //         {
-                //             GameReport.TrumpedHighCards++;
-                //             return this.PlayCard(trump);
-                //         }
-                //     }
-                // }
-
-                //var card = cardsToPlay.OrderBy(c => Evaluator.CardScore(c, context, cardsToPlay)).First();
-
-                //if (card != null)
-                //{
-                //    return this.PlayCard(card);
-                //}
             }
 
             PlayerAction cardToPlay;
