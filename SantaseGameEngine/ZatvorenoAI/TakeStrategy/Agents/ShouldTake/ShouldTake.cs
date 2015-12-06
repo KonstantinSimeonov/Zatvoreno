@@ -8,6 +8,7 @@
     using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
+    using Agents.ShouldTake.Response;
 
     public class ShouldTake : IShouldTake
     {
@@ -16,6 +17,47 @@
         public ShouldTake(ICardTracker cT)
         {
             this.cardTracker = cT;
+        }
+
+        public ShouldTakeResponse ShouldPlayerTakeResponse(PlayerTurnContext context, ICollection<Card> hand)
+        {
+            // Inlining unused var.
+            // var shouldTake = false;
+
+            // must take
+            var parameters = new bool[5]; // to be expanded;
+            if (this.CheckHandForAnnounces())
+            {
+                ZatvorenoAI.report.Add("Reason for taking: Because Can Announce");
+                parameters[0] = true;
+            }
+
+            if (this.OpponentWins(context, hand))
+            {
+                ZatvorenoAI.report.Add("Reason for taking: Because Opponent Would Win");
+                parameters[1] = true;
+            }
+
+            if (this.PlayerWins(context, hand))
+            {
+                ZatvorenoAI.report.Add("Reason for taking: Because I Win");
+                parameters[2] = true;
+            }
+
+            if (this.OpponentPlaysTooHigh(context, hand))
+            {
+                ZatvorenoAI.report.Add("Reason for taking: Because Opponent Played Too High");
+                parameters[3] = true;
+            }
+
+            if (this.HaveHigherCard(context, hand))
+            {
+                ZatvorenoAI.report.Add("Reason for taking: Because I Can!");
+                parameters[4] = true;
+            }
+
+            return new ShouldTakeResponse(parameters);
+
         }
 
         public bool ShouldPlayerTake(PlayerTurnContext context, ICollection<Card> hand)
