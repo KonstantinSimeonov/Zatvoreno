@@ -1,8 +1,8 @@
 ﻿namespace ZatvorenoAI.CardEvaluator
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CardTracers.CardStates;
     using Contracts;
     using Santase.Logic.Cards;
@@ -19,7 +19,7 @@
 
         public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
         {
-            return 0;
+            return this.CurrentCardWorth(card, context, allowedCards);
         }
 
         private float CurrentCardWorth(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
