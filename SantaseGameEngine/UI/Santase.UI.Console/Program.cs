@@ -18,11 +18,11 @@
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);
-                //if (i < 10)
-                //{
-                //    File.WriteAllText("../../report" + i + ".txt", ZatvorenoAI.report.ToString());
-                //    ZatvorenoAI.report.Empty();
-                //}
+                if (i < 10)
+                {
+                    File.WriteAllText("../../Reports/report" + i + ".txt", ZatvorenoAI.report.ToString());
+                    ZatvorenoAI.report.Empty();
+                }
 
                 if (i % ((length/20) + 1) == 0)
                 {

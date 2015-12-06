@@ -16,8 +16,7 @@
     public class ZatvorenoAI : BasePlayer
     {
         // Utils
-        // public static IReport Report = new DetailedReport();
-        public static IReport report = new EmptyReport();
+        public static IReport report;
 
         private const string AIName = "Zatvoreno";
 
@@ -34,6 +33,13 @@
         private static readonly ICardEval Evaluator2 = new CardEvaluatorFirstPlayer(Tracker);
 
         private static readonly IShouldTake TrickDecisionMakerWhenSecond = new ShouldTake(Tracker);
+
+        public ZatvorenoAI()
+        {
+            report = true ?
+                            (IReport)new DetailedReport() :
+                            (IReport)new EmptyReport();
+        }
 
         // Logic
         private bool myTurn = false;
@@ -57,7 +63,7 @@
         {
             Tracer.CurrentTrumpCard = trumpCard;
 
-            // report.Add("Trump for current game is: " + trumpCard.ToString());
+            report.Add("Trump for current game is: " + trumpCard.ToString());
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
@@ -66,7 +72,7 @@
             Tracer.TraceTurn(context);
             Tracker.TraceTurn(context);
 
-            // report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
+            report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
             base.EndTurn(context);
         }
 
@@ -76,7 +82,7 @@
 
             // this.report.ToFile(string.Format("../../report{0}.txt", this.currentGameId));
             // File.WriteAllText("../../report " + this.currentGameId++ + ".txt", this.report.ToString());
-            // report.Add(" ------ END ROUND ------");
+            report.Add(" ------ END ROUND ------");
             base.EndRound();
         }
 
