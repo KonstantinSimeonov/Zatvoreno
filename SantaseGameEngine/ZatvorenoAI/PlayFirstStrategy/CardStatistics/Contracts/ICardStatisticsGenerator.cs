@@ -1,12 +1,12 @@
 ﻿namespace ZatvorenoAI.PlayFirstStrategy.CardStatistics.Contracts
 {
-    using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using CardStaistic;
+    using Santase.Logic.Cards;
+    using Santase.Logic.Players;
 
     public interface ICardStatisticsGenerator
     {
+        ICollection<CardStatistic> GenerateCardStats(PlayerTurnContext context, ICollection<Card> hand);
     }
 }

@@ -28,7 +28,7 @@
                 var worth = this.CardWorth(item, hand, context);
                 var canTake = this.NumberOfHandsCardCanTake(item, context);
                 var taken3 = this.NumberOfCardsThatTakeCard(item, context);
-                stats.Add(new CardStatistic(worth, canTake, taken3));
+                stats.Add(new CardStatistic(worth, canTake, taken3, item));
             }
 
             return stats;
