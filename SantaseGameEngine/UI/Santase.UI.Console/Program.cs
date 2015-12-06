@@ -17,7 +17,7 @@
             var sw = new Stopwatch();
 
             sw.Start();
-            for (int i = 0, length = 10000; i < length; i++)
+            for (int i = 0, length = 1000; i < length; i++)
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);
@@ -27,7 +27,7 @@
                     ZatvorenoAI.report.Empty();
                 }
 
-                if (i % ((length/20) + 1) == 0)
+                if (i % ((length / 20) + 1) == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.SetCursorPosition(0, 0);
