@@ -102,11 +102,12 @@
             var cardsToTake = this.cardTracker
                 .AllCards[suit]
                 .Where(x => x.Key < value &&
-                    (x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown));
+                    (x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown))
+                .ToList();
 
             if (isTrump)
             {
-                cardsToTake.ToList()
+                cardsToTake
                     .AddRange(this.cardTracker
                         .AllCards
                         .Where(s => s.Key != suit)
@@ -114,7 +115,9 @@
                         .Where(x => x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown));
             }
 
-            var high = cardsToTake.Max(x => x.Key);
+            var high = cardsToTake.Count > 0 ?
+                    cardsToTake.Max(x => x.Key) :
+                    0;
 
             result += high;
 

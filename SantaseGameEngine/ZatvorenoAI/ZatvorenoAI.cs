@@ -31,7 +31,7 @@
         // Card evaluation and decision makers
         private static readonly ICardEval Evaluator = new CardEval(Tracer);
 
-        private static readonly ICardEval Evaluator2 = new CardEvaluatorFirsPlayer(Tracker);
+        private static readonly ICardEval Evaluator2 = new CardEvaluatorFirstPlayer(Tracker);
 
         private static readonly IShouldTake TrickDecisionMakerWhenSecond = new ShouldTake(Tracker);
 

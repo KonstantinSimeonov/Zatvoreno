@@ -41,7 +41,7 @@
   <ItemGroup>
     <Compile Include="CardEvaluator\CardEval.cs" />
     <Compile Include="CardEvaluator\CardEvaluatorWorthBased.cs" />
-    <Compile Include="CardEvaluator\CardEvaluatorFirsPlayer.cs" />
+    <Compile Include="CardEvaluator\CardEvaluatorFirstPlayer.cs" />
     <Compile Include="CardEvaluator\CardEvaluatorSecondPlayer.cs" />
     <Compile Include="CardEvaluator\ICardEval.cs" />
     <Compile Include="CardTracers\CardTracer.cs" />

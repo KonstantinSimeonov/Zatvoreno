@@ -2,16 +2,17 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+
+    using CardTracers.CardStates;
     using Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using CardTracers.CardStates;
 
-    public class CardEvaluatorFirsPlayer : ICardEval
+    public class CardEvaluatorFirstPlayer : ICardEval
     {
         private ICardTracker cardTracker;
 
-        public CardEvaluatorFirsPlayer(ICardTracker ct)
+        public CardEvaluatorFirstPlayer(ICardTracker ct)
         {
             this.cardTracker = ct;
         }

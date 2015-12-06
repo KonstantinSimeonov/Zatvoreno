@@ -3,12 +3,13 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
+    using Agents.ShouldTake.Response;
     using CardTracers.CardStates;
     using Contracts;
     using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using Agents.ShouldTake.Response;
 
     public class ShouldTake : IShouldTake
     {
