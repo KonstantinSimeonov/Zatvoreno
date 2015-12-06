@@ -29,7 +29,7 @@
 
             if (response.Annouce)
             {
-                var takesForAnounceCase = gameActions.Where(x => x.PlayerTakes && (x.PlayerCard.GetValue() > 4 && x.PlayerCard.GetValue() < 3)).ToList();
+                var takesForAnounceCase = gameActions.Where(x => x.PlayerTakes && (x.PlayerCard.GetValue() > 4 || x.PlayerCard.GetValue() < 3)).ToList();
 
                 int minValue;
                 if (takesForAnounceCase.Count == 0)
@@ -66,17 +66,41 @@
                 return takesPlayerWin.First(x => x.HandValue == maxValue).PlayerCard;
             }
 
-            var take = gameActions.Where(x => x.PlayerTakes).ToList();
-
-            int value;
-            if (take.Count == 0)
+            if (response.Take)
             {
-                value = gameActions.Min(x => x.HandValue);
-                return gameActions.First(x => x.HandValue == value).PlayerCard;
+                var take = gameActions.Where(x => x.PlayerTakes && x.PlayerCard.Suit != context.TrumpCard.Suit).ToList();
+
+                int value;
+                if (take.Count == 0)
+                {
+                    value = gameActions.Min(x => x.HandValue);
+                    return gameActions.First(x => x.HandValue == value).PlayerCard;
+                }
+
+                value = take.Min(x => x.HandValue);
+                return take.First(x => x.HandValue == value).PlayerCard;
             }
 
-            value = take.Min(x => x.HandValue);
-            return take.First(x => x.HandValue == value).PlayerCard;
+            if (context.State.ShouldObserveRules)
+            {
+                var cardsToReturn = gameActions
+                    .Where(g => g.PlayerCard.Suit == g.OpponetCard.Suit);
+                if (cardsToReturn.Count() == 0)
+                {
+                    var trumpCards = gameActions.Where(g => g.PlayerCard.Suit == context.TrumpCard.Suit);
+
+                    if (trumpCards.Count() == 0)
+                    {
+                        return hand.OrderBy(c => c.GetValue()).First();
+                    }
+
+                    return trumpCards.OrderBy(g => g.HandValue).First().PlayerCard;
+                }
+
+                return cardsToReturn.OrderBy(g => g.HandValue).First().PlayerCard;
+            }
+
+            return hand.Where(c => c.Suit != context.TrumpCard.Suit).OrderBy(c => c.GetValue()).First();
         }
     }
 }

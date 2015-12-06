@@ -1,6 +1,7 @@
 ﻿namespace Santase.UI.Console
 {
     using System;
+    using System.Diagnostics;
     using System.IO;
     using AI.DummyPlayer;
     using Santase.AI.SmartPlayer;
@@ -8,12 +9,14 @@
     using Santase.Logic.GameMechanics;
     using Santase.Logic.Players;
     using ZatvorenoAI;
-    
+
     public static class Program
     {
         public static void Main()
         {
+            var sw = new Stopwatch();
 
+            sw.Start();
             for (int i = 0, length = 10000; i < length; i++)
             {
                 var game = CreateGameVersusBot();
@@ -32,6 +35,8 @@
                 }
             }
 
+            sw.Stop();
+            Console.WriteLine(sw.Elapsed);
             Console.WriteLine(ZatvorenoAI.GetReports());
 
             // Console.WriteLine(ZatvorenoAI.WinRate);

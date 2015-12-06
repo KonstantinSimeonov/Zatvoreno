@@ -140,39 +140,43 @@
 
             if (!context.IsFirstPlayerTurn)
             {
-                var shouldTake = TrickDecisionMakerWhenSecond.ShouldPlayerTake(context, availableCardsFromHand);
+                var cardByChoser = ActionChoser.CardToPlay(context, availableCardsFromHand);
 
-                if (shouldTake)
-                {
-                    // to extract taking agents.
-                    var viableCards = availableCardsFromHand
-                        .Where(c => (c.Suit == context.FirstPlayedCard.Suit &&
-                        c.GetValue() > context.FirstPlayedCard.GetValue()) ||
-                        (context.FirstPlayedCard.Suit != context.TrumpCard.Suit && c.Suit == context.TrumpCard.Suit) ||
-                        (context.FirstPlayedCard.Suit == context.TrumpCard.Suit && c.Suit == context.TrumpCard.Suit && c.GetValue() > context.FirstPlayedCard.GetValue()));
+                return this.PlayCard(cardByChoser);
 
-                    var viableCardsWithoutAnnouncePairs = viableCards
-                        .Where(c => c.Type != CardType.Queen &&
-                                    c.Type != CardType.King)
-                        .ToArray();
+                ////var shouldTake = TrickDecisionMakerWhenSecond.ShouldPlayerTake(context, availableCardsFromHand);
 
-                    if (viableCardsWithoutAnnouncePairs.Length > 0)
-                    {
-                        var minorNonAnnounceCard = viableCardsWithoutAnnouncePairs.OrderBy(c => c.GetValue()).First();
+                ////if (shouldTake)
+                ////{
+                //// to extract taking agents.
+                ////var viableCards = availableCardsFromHand
+                ////    .Where(c => (c.Suit == context.FirstPlayedCard.Suit &&
+                ////    c.GetValue() > context.FirstPlayedCard.GetValue()) ||
+                ////    (context.FirstPlayedCard.Suit != context.TrumpCard.Suit && c.Suit == context.TrumpCard.Suit) ||
+                ////    (context.FirstPlayedCard.Suit == context.TrumpCard.Suit && c.Suit == context.TrumpCard.Suit && c.GetValue() > context.FirstPlayedCard.GetValue()));
 
-                        return this.PlayCard(minorNonAnnounceCard);
-                    }
+                ////var viableCardsWithoutAnnouncePairs = viableCards
+                ////    .Where(c => c.Type != CardType.Queen &&
+                ////                c.Type != CardType.King)
+                ////    .ToArray();
 
-                    if (viableCards.ToArray().Length > 0)
-                    {
-                        var minorForcedAnnounceCard = viableCards.OrderBy(c => c.GetValue()).First();
+                ////if (viableCardsWithoutAnnouncePairs.Length > 0)
+                ////{
+                ////    var minorNonAnnounceCard = viableCardsWithoutAnnouncePairs.OrderBy(c => c.GetValue()).First();
 
-                        return this.PlayCard(minorForcedAnnounceCard);
-                    }
-                }
+                ////    return this.PlayCard(minorNonAnnounceCard);
+                ////}
 
-                var card = availableCardsFromHand.OrderBy(c => Evaluator.CardScore(c, context, availableCardsFromHand)).First();
-                return this.PlayCard(card);
+                ////if (viableCards.ToArray().Length > 0)
+                ////{
+                ////    var minorForcedAnnounceCard = viableCards.OrderBy(c => c.GetValue()).First();
+
+                ////    return this.PlayCard(minorForcedAnnounceCard);
+                ////}
+                ////}
+
+                //var card = availableCardsFromHand.OrderBy(c => Evaluator.CardScore(c, context, availableCardsFromHand)).First();
+                //return this.PlayCard(card);
             }
 
             PlayerAction cardToPlay;

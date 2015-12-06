@@ -27,7 +27,7 @@
 
             // must take
             var parameters = new bool[5]; // to be expanded;
-            if (this.CheckHandForAnnounces())
+            if (this.CheckHandForAnnounces(context, hand))
             {
                 ZatvorenoAI.report.Add("Reason for taking: Because Can Announce");
                 parameters[0] = true;
@@ -58,47 +58,6 @@
             }
 
             return new ShouldTakeResponse(parameters);
-
-        }
-
-        public bool ShouldPlayerTake(PlayerTurnContext context, ICollection<Card> hand)
-        {
-            // Inlining unused var.
-            // var shouldTake = false;
-
-            // must take
-            if (this.CheckHandForAnnounces())
-            {
-                ZatvorenoAI.report.Add("Reason for taking: Because Can Announce");
-                return true;
-            }
-
-            if (this.OpponentWins(context, hand))
-            {
-                ZatvorenoAI.report.Add("Reason for taking: Because Opponent Would Win");
-                return true;
-            }
-
-            if (this.PlayerWins(context, hand))
-            {
-                ZatvorenoAI.report.Add("Reason for taking: Because I Win");
-                return true;
-            }
-
-            if (this.OpponentPlaysTooHigh(context, hand))
-            {
-                ZatvorenoAI.report.Add("Reason for taking: Because Opponent Played Too High");
-                return true;
-            }
-
-            if (this.HaveHigherCard(context, hand))
-            {
-                ZatvorenoAI.report.Add("Reason for taking: Because I Can!");
-                return true;
-            }
-
-            // TODO:  should it take depending on possible takes
-            return false; // shouldTake;
         }
 
         private bool HaveHigherCard(PlayerTurnContext context, ICollection<Card> hand)
@@ -144,22 +103,23 @@
         }
 
         // must take in all casses
-        private bool CheckHandForAnnounces()
+        private bool CheckHandForAnnounces(PlayerTurnContext context, ICollection<Card> hand)
         {
-            var announceIsPresent = false;
-
             foreach (var item in this.cardTracker.AllCards)
             {
                 var cardsOfSuit = item.Value;
 
-                if (cardsOfSuit[3] == CardTracerState.InHand && cardsOfSuit[4] == CardTracerState.InHand)
+                var haveAnnounce = hand.Where(c => c.Type == CardType.King || c.Type == CardType.Queen).GroupBy(c => c.Suit).Any(g => g.Count() == 2);
+
+
+
+                if (haveAnnounce)
                 {
-                    announceIsPresent = true;
-                    break;
+                    return true;
                 }
             }
 
-            return announceIsPresent;
+            return false;
         }
 
         private bool OpponentWins(PlayerTurnContext context, ICollection<Card> hand)
