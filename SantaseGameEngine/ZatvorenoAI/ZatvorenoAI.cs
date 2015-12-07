@@ -139,15 +139,19 @@
             {
                 var cardByChoser = ActionChoser.CardToPlay(context, availableCardsFromHand);
 
-                return this.PlayCard(cardByChoser);                
+                return this.PlayCard(cardByChoser);
             }
 
             PlayerAction cardToPlay;
 
-            cardToPlay = this.PlayCard(
-                                CardChoser.CardToPlayAndCloseLogic(context, availableCardsFromHand)
-                                .Value
-                                );
+            var condition = CardChoser.CardToPlayAndCloseLogic(context, availableCardsFromHand);
+
+            //if (condition.Key && context.State.CanClose)
+            //{
+            //    return this.CloseGame();
+            //}
+
+            cardToPlay = this.PlayCard(condition.Value);
 
             return cardToPlay;
         }

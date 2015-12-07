@@ -41,14 +41,13 @@
             }
             else
             {
-                if (evaluatedOption.Closing) // ne mislq 4e ima nujda ot proverka ako sme vlezli trqbva da ima pone 4 sigurni ryce
+                if (evaluatedOption.Closing)
                 {
                     var optimalOptions = evaluatedOption.CardStats.Where(x => x.CanBeTakenCount == 0)
                    .OrderByDescending(x => x.CardWorth);
 
                     return new KeyValuePair<bool, Card>(true, optimalOptions.First().Card);
                 }
-
 
                 if (evaluatedOption.OpponetAbove50)
                 {

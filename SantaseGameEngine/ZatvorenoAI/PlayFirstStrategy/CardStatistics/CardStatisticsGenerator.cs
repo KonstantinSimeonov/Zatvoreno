@@ -75,16 +75,6 @@
                               && x.Key > card.GetValue())
                   .Count();
 
-            //if (card.Suit != context.TrumpCard.Suit && count == 0 && context.State.ShouldObserveRules)
-            //{
-            //    count += this.cardTracker.AllCards[context.TrumpCard.Suit].Count(x => x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown);
-            //}
-
-            //if (card.Suit != context.TrumpCard.Suit && !context.State.ShouldObserveRules)
-            //{
-            //    count += this.cardTracker.AllCards[context.TrumpCard.Suit].Count(x => x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown);
-            //}
-
             return count;
         }
     }
