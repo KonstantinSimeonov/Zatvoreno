@@ -59,13 +59,21 @@
                     return new KeyValuePair<bool, Card>(false, optimalOption);
                 }
 
-                if(evaluatedOption.PlayerUnder33 && context.CardsLeftInDeck>6)
+                if (evaluatedOption.PlayerUnder33 && context.CardsLeftInDeck > 6)
                 {
                     var optimalOption = evaluatedOption.CardStats
+                                       .Where(x => x.CanBeTakenCount == 0)
                                        .OrderByDescending(x => x.CardWorth)
-                                       .First().Card;
+                                       .ToList();
 
-                    return new KeyValuePair<bool, Card>(false, optimalOption);
+                    if(optimalOption.Count == 0)
+                    {
+                        var wayToPlay = evaluatedOption.CardStats.OrderBy(x => x.CardWorth).First().Card;
+                        return new KeyValuePair<bool, Card>(false, wayToPlay);
+                    }
+
+                    var card = optimalOption.First().Card;
+                    return new KeyValuePair<bool, Card>(false, card);
                 }
 
                 var minWortPlay = evaluatedOption.CardStats.OrderBy(x => x.CardWorth).First().Card;
