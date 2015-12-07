@@ -9,6 +9,7 @@
             this.PlayerWins = parameters[2];
             this.OpponentHighCard = parameters[3];
             this.Take = parameters[4];
+            this.GetLastTrump = parameters[5];
         }
 
         public bool Annouce { get; private set; }
@@ -21,5 +22,6 @@
 
         public bool Take { get; private set; }
 
+        public bool GetLastTrump { get; private set; }
     }
 }

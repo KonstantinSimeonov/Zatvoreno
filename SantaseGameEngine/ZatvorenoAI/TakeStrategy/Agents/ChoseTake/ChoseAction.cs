@@ -1,13 +1,13 @@
 ﻿namespace ZatvorenoAI.TakeStrategy.Agents.ChoseTake
 {
+    using System.Collections.Generic;
     using System.Linq;
+
     using Contracts;
     using global::ZatvorenoAI.Contracts;
-    using PossibleTakes.Action;
     using NeedToTake.Contracts;
     using PossibleTakes.Contracts;
     using Santase.Logic.Cards;
-    using System.Collections.Generic;
     using Santase.Logic.Players;
 
     public class ChoseAction : IChoseAction
@@ -69,6 +69,15 @@
 
                 var maxValue = takesPlayerWin.Max(x => x.HandValue);
                 return takesPlayerWin.First(x => x.HandValue == maxValue).PlayerCard;
+            }
+
+            if (response.GetLastTrump)
+            {
+                var weakCard = gameActions.Where(a => !a.PlayerTakes).OrderBy(a => a.HandValue).FirstOrDefault();
+                if (weakCard != null)
+                {
+                    return weakCard.PlayerCard;
+                }
             }
 
             if (response.Take)

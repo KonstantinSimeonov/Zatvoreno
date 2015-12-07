@@ -26,7 +26,7 @@
             // var shouldTake = false;
 
             // must take
-            var parameters = new bool[5]; // to be expanded;
+            var parameters = new bool[6]; // to be expanded;
             if (this.CheckHandForAnnounces(context, hand))
             {
                 ZatvorenoAI.report.Add("Reason for taking: Because Can Announce");
@@ -57,7 +57,28 @@
                 parameters[4] = true;
             }
 
+            if (this.ShouldTakeLastTrump(context, hand))
+            {
+                ZatvorenoAI.report.Add("Reason for taking: Because I Can!");
+                parameters[5] = true;
+            }
+
             return new ShouldTakeResponse(parameters);
+        }
+
+        private bool ShouldTakeLastTrump(PlayerTurnContext context, ICollection<Card> hand)
+        {
+            if (context.CardsLeftInDeck != 2 || context.State.ShouldObserveRules)
+            {
+                return false;
+            }
+
+            if (context.TrumpCard.Type == CardType.Ace)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private bool HaveHigherCard(PlayerTurnContext context, ICollection<Card> hand)

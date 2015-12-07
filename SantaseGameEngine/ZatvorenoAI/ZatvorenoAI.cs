@@ -146,10 +146,10 @@
 
             var condition = CardChoser.CardToPlayAndCloseLogic(context, availableCardsFromHand);
 
-            //if (condition.Key && context.State.CanClose)
-            //{
-            //    return this.CloseGame();
-            //}
+            if (context.State.CanClose && this.Cards.Count(c => c.Suit == context.TrumpCard.Suit) > 4)
+            {
+                return this.CloseGame();
+            }
 
             cardToPlay = this.PlayCard(condition.Value);
 
