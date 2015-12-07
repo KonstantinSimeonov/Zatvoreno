@@ -61,12 +61,12 @@
     <Compile Include="Contracts\IReport.cs" />
     <Compile Include="Reporters\Report.cs" />
     <Compile Include="TakeStrategy\Agents\ChoseTake\ChoseAction.cs" />
-    <Compile Include="TakeStrategy\Agents\ChoseTake\Contracts\IChoseAction.cs" />
+    <Compile Include="Contracts\IChoseAction.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\Action\GameAction.cs" />
     <Compile Include="Contracts\IShouldTake.cs" />
     <Compile Include="TakeStrategy\Agents\ShouldTake\Response\ShouldTakeResponse.cs" />
     <Compile Include="TakeStrategy\Agents\ShouldTake\ShouldTake.cs" />
-    <Compile Include="TakeStrategy\Agents\PossibleTakes\Contracts\IPossibleActions.cs" />
+    <Compile Include="Contracts\IPossibleActions.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\PossibleActions.cs" />
     <Compile Include="ZatvorenoAI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

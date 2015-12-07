@@ -1,6 +1,5 @@
 ﻿namespace ZatvorenoAI.TakeStrategy.Agents.PossibleTakes.Action
 {
-    using System.Collections.Generic;
     using System.Linq;
     using CardTracers.CardStates;
     using global::ZatvorenoAI.Contracts;

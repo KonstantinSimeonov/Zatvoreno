@@ -1,4 +1,4 @@
-﻿namespace ZatvorenoAI.TakeStrategy.Agents.ChoseTake.Contracts
+﻿namespace ZatvorenoAI.Contracts
 {
     using System.Collections.Generic;
     using Santase.Logic.Cards;

@@ -13,10 +13,8 @@
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
     using TakeStrategy.Agents.ChoseTake;
-    using TakeStrategy.Agents.ChoseTake.Contracts;
     using TakeStrategy.Agents.NeedToTake;
     using TakeStrategy.Agents.PossibleTakes;
-    using TakeStrategy.Agents.PossibleTakes.Contracts;
 
     public class ZatvorenoAI : BasePlayer
     {

@@ -4,8 +4,6 @@
     using System.Linq;
 
     using Contracts;
-    using global::ZatvorenoAI.Contracts;
-    using PossibleTakes.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 

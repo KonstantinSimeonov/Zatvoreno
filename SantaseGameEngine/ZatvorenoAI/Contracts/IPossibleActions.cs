@@ -1,9 +1,9 @@
-﻿namespace ZatvorenoAI.TakeStrategy.Agents.PossibleTakes.Contracts
+﻿namespace ZatvorenoAI.Contracts
 {
     using System.Collections.Generic;
-    using Action;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
+    using TakeStrategy.Agents.PossibleTakes.Action;
 
     public interface IPossibleActions
     {

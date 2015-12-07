@@ -1,12 +1,11 @@
 ﻿namespace ZatvorenoAI.TakeStrategy.Agents.PossibleTakes
 {
-    using System.Linq;
     using System.Collections.Generic;
+    using Action;
     using Contracts;
     using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using Action;
 
     public class PossibleActions : IPossibleActions
     {
