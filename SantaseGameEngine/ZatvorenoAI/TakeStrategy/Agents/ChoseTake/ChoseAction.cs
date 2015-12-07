@@ -5,7 +5,6 @@
 
     using Contracts;
     using global::ZatvorenoAI.Contracts;
-    using NeedToTake.Contracts;
     using PossibleTakes.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
@@ -14,12 +13,11 @@
     {
         private readonly IPossibleActions possibleActions;
         private readonly IShouldTake shouldTake;
-        private readonly ICardTracker cardTracker;
 
-        public ChoseAction(IPossibleActions pA, IShouldTake sT)
+        public ChoseAction(IPossibleActions possibleActions, IShouldTake shouldTake)
         {
-            this.shouldTake = sT;
-            this.possibleActions = pA;
+            this.shouldTake = shouldTake;
+            this.possibleActions = possibleActions;
         }
 
         public Card CardToPlay(PlayerTurnContext context, ICollection<Card> hand)

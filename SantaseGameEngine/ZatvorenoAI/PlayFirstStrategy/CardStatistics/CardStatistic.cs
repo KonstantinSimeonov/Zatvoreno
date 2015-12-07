@@ -1,4 +1,4 @@
-﻿namespace ZatvorenoAI.PlayFirstStrategy.CardStatistics.CardStaistic
+﻿namespace ZatvorenoAI.PlayFirstStrategy.CardStatistics
 {
     using Santase.Logic.Cards;
 

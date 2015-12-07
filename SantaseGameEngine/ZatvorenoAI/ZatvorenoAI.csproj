@@ -39,34 +39,31 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CardEvaluator\CardEval.cs" />
     <Compile Include="CardEvaluator\CardEvaluatorWorthBased.cs" />
     <Compile Include="CardEvaluator\CardEvaluatorFirstPlayer.cs" />
-    <Compile Include="CardEvaluator\CardEvaluatorSecondPlayer.cs" />
-    <Compile Include="CardEvaluator\ICardEval.cs" />
+    <Compile Include="Contracts\ICardEval.cs" />
     <Compile Include="CardTracers\AdequateCardTracker.cs" />
     <Compile Include="CardTracers\CardTracerState.cs" />
     <Compile Include="CardTracers\QuickSpecificCardSearchTracker.cs" />
-    <Compile Include="Contracts\ICardTracer.cs" />
     <Compile Include="Contracts\ICardTracker.cs" />
-    <Compile Include="Contracts\IReport.cs" />
-    <Compile Include="PlayFirstStrategy\ActionChoser\Contracts\IFistActionInTrickChoser.cs" />
+    <Compile Include="Contracts\ISummaryReport.cs" />
+    <Compile Include="Contracts\IFistActionInTrickChoser.cs" />
     <Compile Include="PlayFirstStrategy\ActionChoser\FirstActionInTrickChoser.cs" />
-    <Compile Include="PlayFirstStrategy\CardStatistics\CardStaistic\CardStatistic.cs" />
+    <Compile Include="PlayFirstStrategy\CardStatistics\CardStatistic.cs" />
     <Compile Include="PlayFirstStrategy\CardStatistics\CardStatisticsGenerator.cs" />
-    <Compile Include="PlayFirstStrategy\CardStatistics\Contracts\ICardStatisticsGenerator.cs" />
-    <Compile Include="PlayFirstStrategy\TurnContext\Contracts\IOptionEvaluator.cs" />
+    <Compile Include="Contracts\ICardStatisticsGenerator.cs" />
+    <Compile Include="Contracts\IOptionEvaluator.cs" />
     <Compile Include="PlayFirstStrategy\TurnContext\OptionEvaluator.cs" />
     <Compile Include="PlayFirstStrategy\TurnContext\Response\OptionsEvaluationResponse.cs" />
     <Compile Include="Reporters\ContextExtensions.cs" />
     <Compile Include="Reporters\DetailedReport.cs" />
     <Compile Include="Reporters\EmptyReport.cs" />
-    <Compile Include="Reporters\IReport.cs" />
+    <Compile Include="Contracts\IReport.cs" />
     <Compile Include="Reporters\Report.cs" />
     <Compile Include="TakeStrategy\Agents\ChoseTake\ChoseAction.cs" />
     <Compile Include="TakeStrategy\Agents\ChoseTake\Contracts\IChoseAction.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\Action\GameAction.cs" />
-    <Compile Include="TakeStrategy\Agents\ShouldTake\Contracts\IShouldTake.cs" />
+    <Compile Include="Contracts\IShouldTake.cs" />
     <Compile Include="TakeStrategy\Agents\ShouldTake\Response\ShouldTakeResponse.cs" />
     <Compile Include="TakeStrategy\Agents\ShouldTake\ShouldTake.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\Contracts\IPossibleActions.cs" />

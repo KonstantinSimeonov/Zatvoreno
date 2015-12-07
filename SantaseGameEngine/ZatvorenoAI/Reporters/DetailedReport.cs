@@ -1,6 +1,7 @@
 ﻿namespace ZatvorenoAI.Reporters
 {
     using System.Text;
+    using Contracts;
 
     public class DetailedReport : IReport
     {

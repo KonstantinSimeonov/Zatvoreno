@@ -3,11 +3,10 @@
     using System;
     using System.Diagnostics;
     using System.IO;
-    using AI.DummyPlayer;
-    using Santase.AI.SmartPlayer;
-    using Santase.Logic;
-    using Santase.Logic.GameMechanics;
-    using Santase.Logic.Players;
+    using AI.SmartPlayer;
+    using Logic;
+    using Logic.GameMechanics;
+    using Logic.Players;
     using ZatvorenoAI;
 
     public static class Program
@@ -17,7 +16,7 @@
             var sw = new Stopwatch();
 
             sw.Start();
-            for (int i = 0, length = 10000; i < length; i++)
+            for (int i = 0, length = 1000; i < length; i++)
             {
                 var game = CreateGameVersusBot();
                 game.Start(PlayerPosition.FirstPlayer);
@@ -31,7 +30,7 @@
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.SetCursorPosition(0, 0);
-                    Console.WriteLine((i) + " games done");
+                    Console.WriteLine(i + " games done");
                 }
             }
 

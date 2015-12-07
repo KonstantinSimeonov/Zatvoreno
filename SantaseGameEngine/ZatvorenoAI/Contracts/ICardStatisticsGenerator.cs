@@ -1,7 +1,7 @@
-﻿namespace ZatvorenoAI.PlayFirstStrategy.CardStatistics.Contracts
+﻿namespace ZatvorenoAI.Contracts
 {
     using System.Collections.Generic;
-    using CardStaistic;
+    using PlayFirstStrategy.CardStatistics;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 

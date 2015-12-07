@@ -2,6 +2,8 @@
 {
     public class ShouldTakeResponse
     {
+        public const int ShouldTakeCases = 6;
+
         public ShouldTakeResponse(bool[] parameters)
         {
             this.Annouce = parameters[0];

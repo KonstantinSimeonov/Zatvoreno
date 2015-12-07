@@ -1,10 +1,9 @@
-﻿namespace ZatvorenoAI.TakeStrategy.Agents.NeedToTake.Contracts
+﻿namespace ZatvorenoAI.Contracts
 {
     using System.Collections.Generic;
-
-    using Agents.ShouldTake.Response;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
+    using TakeStrategy.Agents.ShouldTake.Response;
 
     public interface IShouldTake
     {

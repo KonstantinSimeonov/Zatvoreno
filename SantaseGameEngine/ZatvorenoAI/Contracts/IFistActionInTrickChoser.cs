@@ -1,4 +1,4 @@
-﻿namespace ZatvorenoAI.PlayFirstStrategy.ActionChoser.Contracts
+﻿namespace ZatvorenoAI.Contracts
 {
     using System.Collections.Generic;
     using Santase.Logic.Cards;

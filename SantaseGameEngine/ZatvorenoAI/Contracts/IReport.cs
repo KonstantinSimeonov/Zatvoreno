@@ -1,14 +1,15 @@
 ﻿namespace ZatvorenoAI.Contracts
 {
-    using System.Collections.Generic;
-    using Santase.Logic;
+    using System.Text;
 
-    public interface ISummaryReport
+    public interface IReport
     {
-        int Wins { get; set; }
+        StringBuilder Content { get; }
 
-        int TrumpsChanged { get; set; }
+        IReport Add(string info);
 
-        IDictionary<Announce, int> AnnounceStatistics { get; set; }
+        IReport Empty();
+
+        string ToString();
     }
 }

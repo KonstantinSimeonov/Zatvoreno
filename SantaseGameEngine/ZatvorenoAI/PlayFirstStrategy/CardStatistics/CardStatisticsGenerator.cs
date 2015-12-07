@@ -2,11 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
-    using CardStaistic;
     using CardTracers.CardStates;
     using Contracts;
-    using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 

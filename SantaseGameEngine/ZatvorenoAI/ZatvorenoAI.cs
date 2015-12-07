@@ -7,18 +7,14 @@
     using CardTracers;
     using Contracts;
     using PlayFirstStrategy.ActionChoser;
-    using PlayFirstStrategy.ActionChoser.Contracts;
     using PlayFirstStrategy.CardStatistics;
-    using PlayFirstStrategy.CardStatistics.Contracts;
     using PlayFirstStrategy.TurnContext;
-    using PlayFirstStrategy.TurnContext.Contracts;
     using Reporters;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
     using TakeStrategy.Agents.ChoseTake;
     using TakeStrategy.Agents.ChoseTake.Contracts;
     using TakeStrategy.Agents.NeedToTake;
-    using TakeStrategy.Agents.NeedToTake.Contracts;
     using TakeStrategy.Agents.PossibleTakes;
     using TakeStrategy.Agents.PossibleTakes.Contracts;
 
@@ -37,8 +33,8 @@
         private static readonly IOptionEvaluator OptionEval;
         private static readonly IFistActionInTrickChoser CardChoser;
 
-        private bool myTurn = false;
-        private int currentGameId = 0;
+        private bool myTurn;
+        private int currentGameId;
 
         static ZatvorenoAI()
         {

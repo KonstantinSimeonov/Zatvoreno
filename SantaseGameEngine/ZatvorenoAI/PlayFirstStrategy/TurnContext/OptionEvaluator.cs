@@ -2,10 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-
-    using CardStatistics.Contracts;
     using Contracts;
-    using global::ZatvorenoAI.Contracts;
     using Response;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;

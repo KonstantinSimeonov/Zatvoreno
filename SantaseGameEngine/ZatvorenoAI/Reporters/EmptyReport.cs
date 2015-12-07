@@ -1,10 +1,7 @@
 ﻿namespace ZatvorenoAI.Reporters
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
-    using System.Threading.Tasks;
+    using Contracts;
 
     public class EmptyReport : IReport
     {
@@ -24,10 +21,6 @@
         public IReport Empty()
         {
             return this;
-        }
-
-        public void ToFile(string path)
-        {
         }
     }
 }

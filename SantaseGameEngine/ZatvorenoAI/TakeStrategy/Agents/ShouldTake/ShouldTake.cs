@@ -1,17 +1,19 @@
 ﻿namespace ZatvorenoAI.TakeStrategy.Agents.NeedToTake
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
     using Agents.ShouldTake.Response;
     using Contracts;
-    using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 
     public class ShouldTake : IShouldTake
     {
         private const int WinPoints = 66;
+
+        private static readonly Action<string> AddToReport = message => ZatvorenoAI.Report.Add(message);
 
         private readonly ICardTracker cardTracker;
 
@@ -23,40 +25,41 @@
         public ShouldTakeResponse ShouldPlayerTakeResponse(PlayerTurnContext context, ICollection<Card> hand)
         {
             // must take
-            var parameters = new bool[6];
+            // TODO: refactoring
+            var parameters = new bool[ShouldTakeResponse.ShouldTakeCases];
             if (this.CheckHandForAnnounces(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because Can Announce");
+                AddToReport("Reason for taking: Because Can Announce");
                 parameters[0] = true;
             }
 
             if (this.OpponentWins(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because Opponent Would Win");
+                AddToReport("Reason for taking: Because Opponent Would Win");
                 parameters[1] = true;
             }
 
             if (this.PlayerWins(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because I Win");
+                AddToReport("Reason for taking: Because I Win");
                 parameters[2] = true;
             }
 
             if (this.OpponentPlaysTooHigh(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because Opponent Played Too High");
+                AddToReport("Reason for taking: Because Opponent Played Too High");
                 parameters[3] = true;
             }
 
             if (this.HaveHigherCard(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because I Can!");
+                AddToReport("Reason for taking: Because I Can!");
                 parameters[4] = true;
             }
 
             if (this.ShouldTakeLastTrump(context, hand))
             {
-                ZatvorenoAI.Report.Add("Reason for taking: Because I Can!");
+                AddToReport("Reason for taking: Because I Can!");
                 parameters[5] = true;
             }
 

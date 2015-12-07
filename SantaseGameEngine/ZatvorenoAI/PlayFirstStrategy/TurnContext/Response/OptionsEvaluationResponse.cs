@@ -1,7 +1,7 @@
 ﻿namespace ZatvorenoAI.PlayFirstStrategy.TurnContext.Response
 {
     using System.Collections.Generic;
-    using CardStatistics.CardStaistic;
+    using CardStatistics;
 
     public class OptionsEvaluationResponse
     {

@@ -1,8 +1,7 @@
-﻿namespace ZatvorenoAI.PlayFirstStrategy.TurnContext.Contracts
+﻿namespace ZatvorenoAI.Contracts
 {
     using System.Collections.Generic;
-
-    using Response;
+    using PlayFirstStrategy.TurnContext.Response;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
 

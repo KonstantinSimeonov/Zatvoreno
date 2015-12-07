@@ -3,10 +3,8 @@
     using System.Collections.Generic;
     using System.Linq;
     using Contracts;
-    using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using TurnContext.Contracts;
 
     public class FirstActionInTrickChoser : IFistActionInTrickChoser
     {
