@@ -1,6 +1,5 @@
 ﻿namespace ZatvorenoAI
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -25,40 +24,41 @@
 
     public class ZatvorenoAI : BasePlayer
     {
-        // Utils
-        public static IReport report;
-
         private const string AIName = "Zatvoreno";
+        private const int ShouldCloseTrumpCount = 4;
 
-        private static readonly ISummaryReport SummaryReport = new SummaryReport();
+        private static readonly ISummaryReport SummaryReport;
+        private static readonly ICardTracker Tracker;
+        private static readonly ICardEval Evaluator2;
+        private static readonly IShouldTake TrickDecisionMakerWhenSecond;
+        private static readonly IPossibleActions PossibleActionGenerator;
+        private static readonly IChoseAction ActionChoser;
+        private static readonly ICardStatisticsGenerator CardStatistics;
+        private static readonly IOptionEvaluator OptionEval;
+        private static readonly IFistActionInTrickChoser CardChoser;
 
-        private static readonly ICardTracker Tracker = new QuickSpecificCardSearchTracker();
+        private bool myTurn = false;
+        private int currentGameId = 0;
 
-        private static readonly ICardEval Evaluator2 = new CardEvaluatorFirstPlayer(Tracker);
-
-        private static readonly IShouldTake TrickDecisionMakerWhenSecond = new ShouldTake(Tracker);
-
-        private static readonly IPossibleActions PossibleActionGenerator = new PossibleActions(Tracker);
-
-        private static readonly IChoseAction ActionChoser = new ChoseAction(PossibleActionGenerator, TrickDecisionMakerWhenSecond);
-
-        private static readonly ICardStatisticsGenerator CardStatistics = new CardStatisticsGenerator(Tracker);
-
-        private static readonly IOptionEvaluator OptionEval = new OptionEvaluator(Tracker, CardStatistics);
-
-        private static readonly IFistActionInTrickChoser CardChoser = new FirstActionInTrickChoser(Tracker, OptionEval);
+        static ZatvorenoAI()
+        {
+            SummaryReport = new SummaryReport();
+            Tracker = new QuickSpecificCardSearchTracker();
+            Evaluator2 = new CardEvaluatorFirstPlayer(Tracker);
+            TrickDecisionMakerWhenSecond = new ShouldTake(Tracker);
+            PossibleActionGenerator = new PossibleActions(Tracker);
+            ActionChoser = new ChoseAction(PossibleActionGenerator, TrickDecisionMakerWhenSecond);
+            CardStatistics = new CardStatisticsGenerator(Tracker);
+            OptionEval = new OptionEvaluator(Tracker, CardStatistics);
+            CardChoser = new FirstActionInTrickChoser(Tracker, OptionEval);
+        }
 
         public ZatvorenoAI()
         {
-            report = true ?
-                            (IReport)new DetailedReport() :
-                            (IReport)new EmptyReport();
+            Report = true ? (IReport)new DetailedReport() : new EmptyReport();
         }
 
-        // Logic
-        private bool myTurn = false;
-
-        private int currentGameId = 0;
+        public static IReport Report { get; private set; }
 
         public override string Name
         {
@@ -75,7 +75,7 @@
 
         public override void StartRound(ICollection<Card> cards, Card trumpCard, int myTotalPoints, int opponentTotalPoints)
         {
-            report.Add("Trump for current game is: " + trumpCard.ToString());
+            Report.Add("Trump for current game is: " + trumpCard.ToString());
             base.StartRound(cards, trumpCard, myTotalPoints, opponentTotalPoints);
         }
 
@@ -83,13 +83,13 @@
         {
             Tracker.TrickResolution(context);
 
-            report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
+            Report.Add(context.Stringify(this.myTurn) + " --- current hand: " + string.Join(", ", this.Cards.Select(x => x.ToString())));
             base.EndTurn(context);
         }
 
         public override void EndRound()
         {
-            report.Add(" ------ END ROUND ------");
+            Report.Add(" ------ END ROUND ------");
             base.EndRound();
         }
 
@@ -105,10 +105,9 @@
                 return this.ChangeTrump(context.TrumpCard);
             }
 
-            // TODO: closing logic
-
             var availableCardsFromHand = this.PlayerActionValidator.GetPossibleCardsToPlay(context, this.Cards);
 
+            // announce logic
             if (context.IsFirstPlayerTurn &&
                 context.CardsLeftInDeck != 12)
             {
@@ -146,7 +145,7 @@
 
             var condition = CardChoser.CardToPlayAndCloseLogic(context, availableCardsFromHand);
 
-            if (context.State.CanClose && this.Cards.Count(c => c.Suit == context.TrumpCard.Suit) > 4)
+            if (context.State.CanClose && this.Cards.Count(c => c.Suit == context.TrumpCard.Suit) > ShouldCloseTrumpCount)
             {
                 return this.CloseGame();
             }

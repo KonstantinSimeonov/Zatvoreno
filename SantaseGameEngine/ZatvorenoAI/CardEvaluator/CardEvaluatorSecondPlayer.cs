@@ -1,13 +1,11 @@
 ﻿namespace ZatvorenoAI.CardEvaluator
 {
-    using Contracts;
-    using Santase.Logic.Cards;
-    using Santase.Logic.Players;
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using Contracts;
+    using Santase.Logic.Cards;
+    using Santase.Logic.Players;
 
     public class CardEvaluatorSecondPlayer
     {
@@ -18,17 +16,15 @@
         private ICardTracer cardTracer;
         private ZatvorenoAI player;
 
-        public CardEvaluatorSecondPlayer(ICardTracer ct)
+        public CardEvaluatorSecondPlayer(ICardTracer tracker)
         {
-            this.cardTracer = ct;
+            this.cardTracer = tracker;
         }
 
         public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
         {
+            // TODO: implement
             var parameters = new List<float>();
-
-
-
             return parameters.Sum();
         }
 

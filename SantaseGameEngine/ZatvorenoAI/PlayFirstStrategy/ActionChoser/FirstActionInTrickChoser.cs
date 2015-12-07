@@ -1,14 +1,10 @@
 ﻿namespace ZatvorenoAI.PlayFirstStrategy.ActionChoser
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Contracts;
     using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
-    using TurnContext.Response;
     using Santase.Logic.Players;
     using TurnContext.Contracts;
 
@@ -17,15 +13,16 @@
         private readonly ICardTracker cardTracker;
         private readonly IOptionEvaluator optionEval;
 
-        public FirstActionInTrickChoser(ICardTracker cT, IOptionEvaluator oE)
+        public FirstActionInTrickChoser(ICardTracker tracker, IOptionEvaluator evaluator)
         {
-            this.cardTracker = cT;
-            this.optionEval = oE;
+            this.cardTracker = tracker;
+            this.optionEval = evaluator;
         }
 
         public KeyValuePair<bool, Card> CardToPlayAndCloseLogic(PlayerTurnContext context, ICollection<Card> hand)
         {
             var evaluatedOption = this.optionEval.EvaluateSituation(context, hand);
+
             if (evaluatedOption.IsEndGame)
             {
                 var optimalOptions = evaluatedOption.CardStats.Where(x => x.CanBeTakenCount == 0)

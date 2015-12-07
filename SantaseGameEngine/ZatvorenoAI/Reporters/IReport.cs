@@ -1,7 +1,7 @@
-﻿using System.Text;
-
-namespace ZatvorenoAI.Reporters
+﻿namespace ZatvorenoAI.Reporters
 {
+    using System.Text;
+
     public interface IReport
     {
         StringBuilder Content { get; }
@@ -9,8 +9,6 @@ namespace ZatvorenoAI.Reporters
         IReport Add(string info);
 
         IReport Empty();
-
-        void ToFile(string path);
 
         string ToString();
     }

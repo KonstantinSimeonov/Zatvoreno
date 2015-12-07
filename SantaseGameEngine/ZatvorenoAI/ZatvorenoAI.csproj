@@ -45,14 +45,11 @@
     <Compile Include="CardEvaluator\CardEvaluatorSecondPlayer.cs" />
     <Compile Include="CardEvaluator\ICardEval.cs" />
     <Compile Include="CardTracers\AdequateCardTracker.cs" />
-    <Compile Include="CardTracers\CardTracer.cs" />
     <Compile Include="CardTracers\CardTracerState.cs" />
     <Compile Include="CardTracers\QuickSpecificCardSearchTracker.cs" />
     <Compile Include="Contracts\ICardTracer.cs" />
     <Compile Include="Contracts\ICardTracker.cs" />
     <Compile Include="Contracts\IReport.cs" />
-    <Compile Include="MCTS\EndGameDecisionMaker.cs" />
-    <Compile Include="MCTS\MCSTNode.cs" />
     <Compile Include="PlayFirstStrategy\ActionChoser\Contracts\IFistActionInTrickChoser.cs" />
     <Compile Include="PlayFirstStrategy\ActionChoser\FirstActionInTrickChoser.cs" />
     <Compile Include="PlayFirstStrategy\CardStatistics\CardStaistic\CardStatistic.cs" />
@@ -74,8 +71,6 @@
     <Compile Include="TakeStrategy\Agents\ShouldTake\ShouldTake.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\Contracts\IPossibleActions.cs" />
     <Compile Include="TakeStrategy\Agents\PossibleTakes\PossibleActions.cs" />
-    <Compile Include="TakeStrategy\Contracts\ITakeStrategy.cs" />
-    <Compile Include="TakeStrategy\TakeStartegy.cs" />
     <Compile Include="ZatvorenoAI.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -1,7 +1,6 @@
 ﻿namespace ZatvorenoAI.CardTracers
 {
     using System.Collections.Generic;
-    using System.Linq;
     using CardStates;
     using Contracts;
     using Santase.Logic.Cards;
@@ -38,22 +37,16 @@
             this.AllCards.Add(CardSuit.Spade, this.spades);
 
             //instatntiate take collections
-
             this.PlayerTookWith = new List<Card>();
             this.OpponentTookWith = new List<Card>();
         }
 
-        // Nali ne obi4ame switch
-        // ne obichame, prafsi
         public Dictionary<CardSuit, Dictionary<int, CardTracerState>> AllCards { get; private set; }
 
         public IList<Card> PlayerTookWith { get; private set; }
 
         public IList<Card> OpponentTookWith { get; private set; }
 
-
-        // Needs to be optimized
-        // no
         public void TrickResolution(PlayerTurnContext context)
         {
             if (context.SecondPlayedCard == null)
@@ -62,7 +55,6 @@
             }
 
             var isPlayerFirst = context.IsFirstPlayerTurn;
-            //var hand = playerHand;
             var firstCard = context.FirstPlayedCard;
             var secondCard = context.SecondPlayedCard;
             var trumpCard = context.TrumpCard;
@@ -145,12 +137,12 @@
 
         private void InitSuiteCollection(Dictionary<int, CardTracerState> suit)
         {
-            suit.Add(11, CardTracerState.Unknown);
-            suit.Add(4, CardTracerState.Unknown);
-            suit.Add(3, CardTracerState.Unknown);
-            suit.Add(2, CardTracerState.Unknown);
-            suit.Add(10, CardTracerState.Unknown);
-            suit.Add(0, CardTracerState.Unknown);
+            var cardValues = new int[] { 0, 2, 3, 4, 10, 11 };
+
+            foreach (var value in cardValues)
+            {
+                suit[value] = CardTracerState.Unknown;
+            }
         }
     }
 }

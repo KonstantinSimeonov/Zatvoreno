@@ -1,14 +1,14 @@
 ﻿namespace ZatvorenoAI.CardEvaluator
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using CardTracers;
     using Contracts;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using System.Collections.Generic;
 
     public class CardEval : ICardEval
     {
+        public const int WinPoints = 66;
         public const float PointValueParameter = 1;
         public const float TrickValueParameter = 1;
         public const float OpponetPointsValueParameter = 1;
@@ -42,9 +42,9 @@
             return value;
         }
 
-        private float CardPointValueMod (Card card)
+        private float CardPointValueMod(Card card)
         {
-            return CardEval.PointValueParameter * card.GetValue();
+            return PointValueParameter * card.GetValue();
         }
 
         private float NumberOfPossibleHandsWonInSuitMod(Card card)
@@ -60,17 +60,17 @@
                 })
                 .Count(x => x.Values < cardValue);
 
-            return -CardEval.TrickValueParameter * (float)possibleHandsCount;
+            return -TrickValueParameter * possibleHandsCount;
         }
 
         private float OpponetsPointsMod(Card card, PlayerTurnContext context)
         {
-            return -card.GetValue() / (66 - context.FirstPlayerRoundPoints) * CardEval.OpponetPointsValueParameter;
+            return -card.GetValue() / (WinPoints - context.FirstPlayerRoundPoints) * OpponetPointsValueParameter;
         }
 
         private float MyPointsMod(Card card, PlayerTurnContext context)
         {
-            return +card.GetValue() / (66-context.SecondPlayerRoundPoints) * CardEval.OpponetPointsValueParameter;
+            return +card.GetValue() / (WinPoints - context.SecondPlayerRoundPoints) * OpponetPointsValueParameter;
         }
     }
 }

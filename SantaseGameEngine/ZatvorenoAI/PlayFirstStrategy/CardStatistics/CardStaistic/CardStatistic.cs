@@ -4,7 +4,7 @@
 
     public class CardStatistic
     {
-        public CardStatistic(int worth, int canTake, int taken3, int lengthOfSuit, Card card ) // ve4e izperkvam :D 
+        public CardStatistic(int worth, int canTake, int taken3, int lengthOfSuit, Card card )
         {
             this.CardWorth = worth;
             this.CanTakeCount = canTake;

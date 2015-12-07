@@ -29,21 +29,21 @@
 
             if (isEndGame)
             {
-                ZatvorenoAI.report.Add("Is EndGame");
+                ZatvorenoAI.Report.Add("Is EndGame");
             }
 
             var playerUnder33Points = context.FirstPlayerRoundPoints < 33;
 
             if (playerUnder33Points)
             {
-                ZatvorenoAI.report.Add("Me Under 33");
+                ZatvorenoAI.Report.Add("Me Under 33");
             }
 
             var opponentAbove50Points = context.SecondPlayerRoundPoints > 50;
 
             if (opponentAbove50Points)
             {
-                ZatvorenoAI.report.Add("He Above 50");
+                ZatvorenoAI.Report.Add("He Above 50");
             }
 
             var strongCards = options.Where(x => x.CanBeTakenCount == 0)
@@ -52,7 +52,7 @@
 
             if (strongCards)
             {
-                ZatvorenoAI.report.Add("Strong Cards");
+                ZatvorenoAI.Report.Add("Strong Cards");
             }
 
             return new OptionsEvaluationResponse(options, isEndGame, playerUnder33Points, opponentAbove50Points, strongCards);

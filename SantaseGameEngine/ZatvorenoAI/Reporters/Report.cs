@@ -28,7 +28,6 @@
 
         public override string ToString()
         {
-            // "Games won: {1}{0}Trumps changes: {2}{0} Trumped aces and tens: {3}{0} Announces:{0}  - Forty: {4}{0}  - Twenty: {5}{0}";
             return string.Format(
                                  ReportFormat,
                                  Environment.NewLine,

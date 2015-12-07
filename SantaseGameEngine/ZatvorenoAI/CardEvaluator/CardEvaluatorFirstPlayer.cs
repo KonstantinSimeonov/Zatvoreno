@@ -10,18 +10,21 @@
 
     public class CardEvaluatorFirstPlayer : ICardEval
     {
+        public const float PointAndSuitMultiplier = 0.5f;
+        public const float BiggestGainDivisor = 21f;
+
         private ICardTracker cardTracker;
 
-        public CardEvaluatorFirstPlayer(ICardTracker ct)
+        public CardEvaluatorFirstPlayer(ICardTracker tracker)
         {
-            this.cardTracker = ct;
+            this.cardTracker = tracker;
         }
 
         public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
         {
             float result = 0f;
             result += this.PointAndSuitCountParameter(card, context, allowedCards);
-            result -= 0.5f * this.PointAndSuitCountParameter(card, context, allowedCards);
+            result -= PointAndSuitMultiplier * this.PointAndSuitCountParameter(card, context, allowedCards);
 
             return result;
         }
@@ -42,7 +45,7 @@
             var allOfSuit = this.cardTracker.AllCards[suit];
             var maxAvailableForTaking = allOfSuit.Where(x => x.Value != CardTracerState.TakenByOpponent ||
                                                             x.Value != CardTracerState.TakenByPlayer).Max(x => x.Key);
-            return (value + maxAvailableForTaking) / 21f;
+            return (value + maxAvailableForTaking) / BiggestGainDivisor;
         }
     }
 }

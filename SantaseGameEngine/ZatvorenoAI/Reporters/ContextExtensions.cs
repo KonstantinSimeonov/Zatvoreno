@@ -4,21 +4,24 @@
 
     public static class ContextExtensions
     {
-        public static string Stringify(this PlayerTurnContext context, bool gosho)
-        {
-            var b = gosho;
-            var line = new object[] 
-            {
-                context.State.ToString().Split('.')[3],
-                "your turn: " + b,
-                "your points: " + (b ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints),
-                "opponent points: " + (!b ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints),
-                "your card: " + (b ? context.FirstPlayedCard : context.SecondPlayedCard),
-                "opponent card: " + (!b ? context.FirstPlayedCard : context.SecondPlayedCard),
-                "announce: " + context.FirstPlayerAnnounce
+        private const string Separator = " || ";
 
+        private const int StateIndex = 3;
+
+        public static string Stringify(this PlayerTurnContext context, bool amFirst)
+        {
+            var line = new string[]
+            {
+                context.State.ToString().Split('.')[StateIndex],
+                "your turn: " + amFirst,
+                "your points: " + (amFirst ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints),
+                "opponent points: " + (!amFirst ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints),
+                "your card: " + (amFirst ? context.FirstPlayedCard : context.SecondPlayedCard),
+                "opponent card: " + (!amFirst ? context.FirstPlayedCard : context.SecondPlayedCard),
+                "announce: " + context.FirstPlayerAnnounce
             };
-            return string.Join(" || ", line);
+
+            return string.Join(Separator, line);
         }
     }
 }

@@ -10,11 +10,16 @@
 
     public class CardEvaluatorWorthBased : ICardEval
     {
+        public const int KingValue = 4;
+        public const int QueenValue = 3;
+        public const int TwentyAnnounceValue = 20;
+        public const int FourtyAnnounceValue = 40;
+
         private ICardTracker cardTracker;
 
-        public CardEvaluatorWorthBased(ICardTracker ct)
+        public CardEvaluatorWorthBased(ICardTracker tracker)
         {
-            this.cardTracker = ct;
+            this.cardTracker = tracker;
         }
 
         public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
@@ -32,7 +37,7 @@
             {
                 result = this.NineEvaluation(card, context);
             }
-            else if (cardValue == 3 || cardValue == 4)
+            else if (cardValue == QueenValue || cardValue == KingValue)
             {
                 result = this.QueenKingEvaluation(card, context, allowedCards);
             }
@@ -65,8 +70,8 @@
         {
             var result = 0f;
             var value = card.GetValue();
-            var valueOfCounterPart = value == 4 ? 3 : 4;
-            var announceValue = card.Suit == context.TrumpCard.Suit ? 40f : 20f;
+            var valueOfCounterPart = value == KingValue ? QueenValue : KingValue;
+            var announceValue = card.Suit == context.TrumpCard.Suit ? FourtyAnnounceValue : TwentyAnnounceValue;
 
             var suit = card.Suit;
 
@@ -115,9 +120,7 @@
                         .Where(x => x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown));
             }
 
-            var high = cardsToTake.Count > 0 ?
-                    cardsToTake.Max(x => x.Key) :
-                    0;
+            var high = cardsToTake.Count > 0 ? cardsToTake.Max(x => x.Key) : 0;
 
             result += high;
 
@@ -126,7 +129,7 @@
                 result += 10;
             }
 
-            return /*5f **/ result / (this.MaxTakeCases(value, suit) - cardsToTake.Count());
+            return result / (this.MaxTakeCases(value, suit) - cardsToTake.Count());
         }
 
         private int MaxTakeCases(int cardValue, CardSuit suit)

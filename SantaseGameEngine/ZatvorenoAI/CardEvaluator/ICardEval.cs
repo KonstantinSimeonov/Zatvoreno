@@ -1,8 +1,8 @@
 ﻿namespace ZatvorenoAI.CardEvaluator
 {
+    using System.Collections.Generic;
     using Santase.Logic.Cards;
     using Santase.Logic.Players;
-    using System.Collections.Generic;
 
     public interface ICardEval
     {

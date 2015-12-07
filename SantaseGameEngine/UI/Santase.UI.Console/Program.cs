@@ -23,8 +23,8 @@
                 game.Start(PlayerPosition.FirstPlayer);
                 if (i < 10)
                 {
-                    File.WriteAllText("../../Reports/report" + i + ".txt", ZatvorenoAI.report.ToString());
-                    ZatvorenoAI.report.Empty();
+                    File.WriteAllText("../../Reports/report" + i + ".txt", ZatvorenoAI.Report.ToString());
+                    ZatvorenoAI.Report.Empty();
                 }
 
                 if (i % (length / 20) == 0)
