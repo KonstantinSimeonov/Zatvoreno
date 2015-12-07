@@ -27,7 +27,7 @@
                     ZatvorenoAI.report.Empty();
                 }
 
-                if (i % ((length / 20) + 1) == 0)
+                if (i % (length / 20) == 0)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.SetCursorPosition(0, 0);

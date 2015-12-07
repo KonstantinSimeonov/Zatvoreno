@@ -48,7 +48,8 @@
 
             var strongCards = options.Where(x => x.CanBeTakenCount == 0)
                                      .Select(x => x.Card.GetValue())
-                                     .Sum() + context.FirstPlayerRoundPoints >= 60;
+                                     .Sum() + context.FirstPlayerRoundPoints >= 66;
+
             if (strongCards)
             {
                 ZatvorenoAI.report.Add("Strong Cards");
