@@ -9,18 +9,23 @@
     using global::ZatvorenoAI.Contracts;
     using Santase.Logic.Cards;
     using TurnContext.Response;
+    using Santase.Logic.Players;
+    using TurnContext.Contracts;
 
     public class FistActionInTrickChoser : IFistActionInTrickChoser
     {
         private readonly ICardTracker cardTracker;
+        private readonly IOptionEvaluator optionEval;
 
-        public FistActionInTrickChoser(ICardTracker cT)
+        public FistActionInTrickChoser(ICardTracker cT, IOptionEvaluator oE)
         {
             this.cardTracker = cT;
+            this.optionEval = oE;
         }
 
-        public KeyValuePair<bool, Card> CardToPlayAndCloseLogic(OptionsEvaluationResponse evaluatedOption)
+        public KeyValuePair<bool, Card> CardToPlayAndCloseLogic(PlayerTurnContext context, ICollection<Card> hand)
         {
+            var evaluatedOption = optionEval.EvaluateSituation(context, hand);
             if (evaluatedOption.IsEndGame)
             {
                 var optimalOptions = evaluatedOption.CardStats.Where(x => x.CanBeTakenCount == 0)

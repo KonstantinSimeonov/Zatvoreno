@@ -4,9 +4,10 @@
 
     using Santase.Logic.Cards;
     using TurnContext.Response;
+    using Santase.Logic.Players;
 
     public interface IFistActionInTrickChoser
     {
-        KeyValuePair<bool, Card> CardToPlayAndCloseLogic(OptionsEvaluationResponse evaluatedOption);
+        KeyValuePair<bool, Card> CardToPlayAndCloseLogic(PlayerTurnContext context, ICollection<Card> hand);
     }
 }
