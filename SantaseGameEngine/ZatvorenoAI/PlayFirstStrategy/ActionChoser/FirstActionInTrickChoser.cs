@@ -12,12 +12,12 @@
     using Santase.Logic.Players;
     using TurnContext.Contracts;
 
-    public class FistActionInTrickChoser : IFistActionInTrickChoser
+    public class FirstActionInTrickChoser : IFistActionInTrickChoser
     {
         private readonly ICardTracker cardTracker;
         private readonly IOptionEvaluator optionEval;
 
-        public FistActionInTrickChoser(ICardTracker cT, IOptionEvaluator oE)
+        public FirstActionInTrickChoser(ICardTracker cT, IOptionEvaluator oE)
         {
             this.cardTracker = cT;
             this.optionEval = oE;
@@ -63,12 +63,17 @@
                 {
                     var optimalOption = evaluatedOption.CardStats
                                        .Where(x => x.CanBeTakenCount == 0)
+                                       .Where(x => x.Card.Suit != context.TrumpCard.Suit)
                                        .OrderByDescending(x => x.CardWorth)
+                                       .ThenByDescending(x => x.LengthOfSuit)
                                        .ToList();
 
-                    if(optimalOption.Count == 0)
+                    if (optimalOption.Count == 0)
                     {
-                        var wayToPlay = evaluatedOption.CardStats.OrderBy(x => x.CardWorth).First().Card;
+                        var wayToPlay = evaluatedOption.CardStats
+                            .OrderBy(x => x.CardWorth)
+                            .First()
+                            .Card;
                         return new KeyValuePair<bool, Card>(false, wayToPlay);
                     }
 
@@ -76,8 +81,8 @@
                     return new KeyValuePair<bool, Card>(false, card);
                 }
 
-                var minWortPlay = evaluatedOption.CardStats.OrderBy(x => x.CardWorth).First().Card;
-                return new KeyValuePair<bool, Card>(false, minWortPlay);
+                var minWorthPlay = evaluatedOption.CardStats.OrderBy(x => x.CardWorth).ThenByDescending(x => x.LengthOfSuit).First().Card;
+                return new KeyValuePair<bool, Card>(false, minWorthPlay);
             }
         }
     }

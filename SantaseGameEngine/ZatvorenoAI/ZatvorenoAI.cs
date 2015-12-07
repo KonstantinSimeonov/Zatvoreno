@@ -3,9 +3,12 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+
     using CardEvaluator;
     using CardTracers;
     using Contracts;
+    using PlayFirstStrategy.ActionChoser;
+    using PlayFirstStrategy.ActionChoser.Contracts;
     using PlayFirstStrategy.CardStatistics;
     using PlayFirstStrategy.CardStatistics.Contracts;
     using PlayFirstStrategy.TurnContext;
@@ -19,8 +22,6 @@
     using TakeStrategy.Agents.NeedToTake.Contracts;
     using TakeStrategy.Agents.PossibleTakes;
     using TakeStrategy.Agents.PossibleTakes.Contracts;
-    using PlayFirstStrategy.ActionChoser;
-    using PlayFirstStrategy.ActionChoser.Contracts;
 
     public class ZatvorenoAI : BasePlayer
     {
@@ -45,15 +46,13 @@
 
         private static readonly IOptionEvaluator OptionEval = new OptionEvaluator(Tracker, CardStatistics);
 
-        private static readonly IFistActionInTrickChoser CardChoser = new FistActionInTrickChoser(Tracker, OptionEval);
+        private static readonly IFistActionInTrickChoser CardChoser = new FirstActionInTrickChoser(Tracker, OptionEval);
 
         public ZatvorenoAI()
         {
             report = true ?
                             (IReport)new DetailedReport() :
                             (IReport)new EmptyReport();
-
-
         }
 
         // Logic
@@ -140,41 +139,7 @@
             {
                 var cardByChoser = ActionChoser.CardToPlay(context, availableCardsFromHand);
 
-                return this.PlayCard(cardByChoser);
-
-                ////var shouldTake = TrickDecisionMakerWhenSecond.ShouldPlayerTake(context, availableCardsFromHand);
-
-                ////if (shouldTake)
-                ////{
-                //// to extract taking agents.
-                ////var viableCards = availableCardsFromHand
-                ////    .Where(c => (c.Suit == context.FirstPlayedCard.Suit &&
-                ////    c.GetValue() > context.FirstPlayedCard.GetValue()) ||
-                ////    (context.FirstPlayedCard.Suit != context.TrumpCard.Suit && c.Suit == context.TrumpCard.Suit) ||
-                ////    (context.FirstPlayedCard.Suit == context.TrumpCard.Suit && c.Suit == context.TrumpCard.Suit && c.GetValue() > context.FirstPlayedCard.GetValue()));
-
-                ////var viableCardsWithoutAnnouncePairs = viableCards
-                ////    .Where(c => c.Type != CardType.Queen &&
-                ////                c.Type != CardType.King)
-                ////    .ToArray();
-
-                ////if (viableCardsWithoutAnnouncePairs.Length > 0)
-                ////{
-                ////    var minorNonAnnounceCard = viableCardsWithoutAnnouncePairs.OrderBy(c => c.GetValue()).First();
-
-                ////    return this.PlayCard(minorNonAnnounceCard);
-                ////}
-
-                ////if (viableCards.ToArray().Length > 0)
-                ////{
-                ////    var minorForcedAnnounceCard = viableCards.OrderBy(c => c.GetValue()).First();
-
-                ////    return this.PlayCard(minorForcedAnnounceCard);
-                ////}
-                ////}
-
-                //var card = availableCardsFromHand.OrderBy(c => Evaluator.CardScore(c, context, availableCardsFromHand)).First();
-                //return this.PlayCard(card);
+                return this.PlayCard(cardByChoser);                
             }
 
             PlayerAction cardToPlay;
@@ -183,10 +148,6 @@
                                 CardChoser.CardToPlayAndCloseLogic(context, availableCardsFromHand)
                                 .Value
                                 );
-            //cardToPlay = this.PlayCard(
-            //        availableCardsFromHand
-            //        .OrderBy(c => Evaluator2.CardScore(c, context, availableCardsFromHand))
-            //        .First());
 
             return cardToPlay;
         }
@@ -207,22 +168,5 @@
         {
             return context.IsFirstPlayerTurn ? context.FirstPlayerRoundPoints : context.SecondPlayerRoundPoints;
         }
-
-        private bool ShouldCloseGame(PlayerTurnContext context, ICollection<Card> cards)
-        {
-            throw new NotImplementedException("Implement close game");
-
-            var trumpsInPower = cards
-                                    .Where(x => x.Suit == context.TrumpCard.Suit)
-                                    .OrderBy(x => x.Type);
-
-            if (GetMyPoints(context) + trumpsInPower.Sum(x => (long?)x.Type) >= 66)
-            {
-
-            }
-
-            return false;
-        }
-
     }
 }

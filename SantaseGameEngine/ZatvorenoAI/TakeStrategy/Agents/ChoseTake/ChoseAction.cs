@@ -29,8 +29,13 @@
 
             if (response.Annouce)
             {
-                var takesForAnounceCase = gameActions.Where(x => x.PlayerTakes && (x.PlayerCard.GetValue() > 4 || x.PlayerCard.GetValue() < 3)).ToList();
+                var announceCards = hand
+                    .Where(c => c.Type == CardType.King || c.Type == CardType.Queen)
+                    .GroupBy(c => c.Suit)
+                    .Where(g => g.Count() == 2)
+                    .SelectMany(g => g); // TODO: This is ugly.
 
+                var takesForAnounceCase = gameActions.Where(x => x.PlayerTakes && !announceCards.Contains(x.PlayerCard)).ToList();
                 int minValue;
                 if (takesForAnounceCase.Count == 0)
                 {

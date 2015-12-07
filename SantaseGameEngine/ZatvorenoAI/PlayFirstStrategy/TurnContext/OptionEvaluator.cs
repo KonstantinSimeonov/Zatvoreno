@@ -13,17 +13,17 @@
     public class OptionEvaluator : IOptionEvaluator
     {
         private readonly ICardTracker cardTracker;
-        private readonly ICardStatisticsGenerator stastGen;
+        private readonly ICardStatisticsGenerator statsGen;
 
         public OptionEvaluator(ICardTracker ct, ICardStatisticsGenerator st)
         {
             this.cardTracker = ct;
-            this.stastGen = st;
+            this.statsGen = st;
         }
 
         public OptionsEvaluationResponse EvaluateSituation(PlayerTurnContext context, ICollection<Card> hand)
         {
-            var options = this.stastGen.GenerateCardStats(context, hand);
+            var options = this.statsGen.GenerateCardStats(context, hand);
 
             var isEndGame = context.State.ShouldObserveRules;
 
@@ -32,9 +32,9 @@
                 ZatvorenoAI.report.Add("Is EndGame");
             }
 
-            var playrUnder33Points = context.FirstPlayerRoundPoints < 33;
+            var playerUnder33Points = context.FirstPlayerRoundPoints < 33;
 
-            if (playrUnder33Points)
+            if (playerUnder33Points)
             {
                 ZatvorenoAI.report.Add("Me Under 33");
             }
@@ -55,7 +55,7 @@
                 ZatvorenoAI.report.Add("Strong Cards");
             }
 
-            return new OptionsEvaluationResponse(options, isEndGame, playrUnder33Points, opponentAbove50Points, strongCards);
+            return new OptionsEvaluationResponse(options, isEndGame, playerUnder33Points, opponentAbove50Points, strongCards);
         }
     }
 }

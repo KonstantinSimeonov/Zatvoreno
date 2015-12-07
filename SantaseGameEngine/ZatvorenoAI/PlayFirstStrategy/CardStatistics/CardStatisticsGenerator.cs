@@ -27,8 +27,9 @@
             {
                 var worth = this.CardWorth(item, hand, context);
                 var canTake = this.NumberOfHandsCardCanTake(item, context);
-                var taken3 = this.NumberOfCardsThatTakeCard(item, context);
-                stats.Add(new CardStatistic(worth, canTake, taken3, item));
+                var takenBy = this.NumberOfCardsThatTakeCard(item, context);
+                var lengthOfSuit = this.LengthOfSuit(item, hand, context);
+                stats.Add(new CardStatistic(worth, canTake, takenBy, lengthOfSuit, item));
             }
 
             return stats;
@@ -48,6 +49,13 @@
 
             var value = card.GetValue() + possibleTakes.Max(x => x.Key);
             return value;
+        }
+
+        private int LengthOfSuit(Card card, ICollection<Card> hand, PlayerTurnContext context)
+        {
+            var length = hand.Where(c => c.Suit == card.Suit).Count();
+
+            return 0;
         }
 
         private int NumberOfHandsCardCanTake(Card card, PlayerTurnContext context)
