@@ -1,5 +1,6 @@
 ﻿namespace ZatvorenoAI.CardTracers
 {
+    using System;
     using System.Collections.Generic;
 
     using CardStates;
@@ -28,6 +29,14 @@
         public Card LastTrump { get; private set; }
 
         public Dictionary<CardSuit, Dictionary<int, CardTracerState>> AllCards { get; private set; }
+
+        public IList<Card> OpponentTookWith
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public void AddCard(Card card)
         {
@@ -112,6 +121,11 @@
             {
                 suit[value] = CardTracerState.Unknown;
             }
+        }
+
+        public void SetFinalRoundHands(ICollection<Card> my)
+        {
+            throw new NotImplementedException();
         }
     }
 }

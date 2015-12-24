@@ -48,6 +48,16 @@
     <Compile Include="Contracts\ICardTracker.cs" />
     <Compile Include="Contracts\ISummaryReport.cs" />
     <Compile Include="Contracts\IFistActionInTrickChoser.cs" />
+    <Compile Include="Contracts\IDecisionMaker.cs" />
+    <Compile Include="DecisionMakers\AnnounceDecisionMaker.cs" />
+    <Compile Include="DecisionMakers\ChangeTrumpDecisionMaker.cs" />
+    <Compile Include="DecisionMakers\ClosingDecisionMaker.cs" />
+    <Compile Include="DecisionMakers\DecisionChainProvider.cs" />
+    <Compile Include="DecisionMakers\DecisionMakingContext.cs" />
+    <Compile Include="DecisionMakers\EndGameDecisionMaker.cs" />
+    <Compile Include="DecisionMakers\PlayingSecondDecisionMaker.cs" />
+    <Compile Include="MCST\EndgameAnalyzer.cs" />
+    <Compile Include="MCST\Node.cs" />
     <Compile Include="PlayFirstStrategy\ActionChoser\FirstActionInTrickChoser.cs" />
     <Compile Include="PlayFirstStrategy\CardStatistics\CardStatistic.cs" />
     <Compile Include="PlayFirstStrategy\CardStatistics\CardStatisticsGenerator.cs" />

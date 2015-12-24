@@ -15,11 +15,11 @@
         public const int TwentyAnnounceValue = 20;
         public const int FourtyAnnounceValue = 40;
 
-        private ICardTracker cardTracker;
+        private ICardTracker cardtracker;
 
         public CardEvaluatorWorthBased(ICardTracker tracker)
         {
-            this.cardTracker = tracker;
+            this.cardtracker = tracker;
         }
 
         public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
@@ -75,8 +75,8 @@
 
             var suit = card.Suit;
 
-            var havePair = this.cardTracker.AllCards[suit][valueOfCounterPart] == CardTracerState.InHand;
-            var counterPartCardTrackInfo = this.cardTracker.AllCards[suit][valueOfCounterPart];
+            var havePair = this.cardtracker.AllCards[suit][valueOfCounterPart] == CardTracerState.InHand;
+            var counterPartCardTrackInfo = this.cardtracker.AllCards[suit][valueOfCounterPart];
             var pairIsPossible = counterPartCardTrackInfo == CardTracerState.Unknown ||
                 counterPartCardTrackInfo == CardTracerState.TrumpIndicator;
 
@@ -104,7 +104,7 @@
 
             var result = 0f;
 
-            var cardsToTake = this.cardTracker
+            var cardsToTake = this.cardtracker
                 .AllCards[suit]
                 .Where(x => x.Key < value &&
                     (x.Value == CardTracerState.InOpponentHand || x.Value == CardTracerState.Unknown))
@@ -113,7 +113,7 @@
             if (isTrump)
             {
                 cardsToTake
-                    .AddRange(this.cardTracker
+                    .AddRange(this.cardtracker
                         .AllCards
                         .Where(s => s.Key != suit)
                         .SelectMany(c => c.Value)
@@ -134,7 +134,7 @@
 
         private int MaxTakeCases(int cardValue, CardSuit suit)
         {
-            var takeCases = this.cardTracker
+            var takeCases = this.cardtracker
                 .AllCards[suit]
                 .Where(c => c.Key < cardValue &&
                             (c.Value == CardTracerState.Unknown || c.Value == CardTracerState.InOpponentHand))

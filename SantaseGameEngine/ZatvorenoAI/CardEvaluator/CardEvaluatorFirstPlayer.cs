@@ -13,11 +13,11 @@
         public const float PointAndSuitMultiplier = 0.5f;
         public const float BiggestGainDivisor = 21f;
 
-        private ICardTracker cardTracker;
+        private ICardTracker cardtracker;
 
         public CardEvaluatorFirstPlayer(ICardTracker tracker)
         {
-            this.cardTracker = tracker;
+            this.cardtracker = tracker;
         }
 
         public float CardScore(Card card, PlayerTurnContext context, ICollection<Card> allowedCards)
@@ -42,7 +42,7 @@
             var suit = card.Suit;
             float value = card.GetValue();
 
-            var allOfSuit = this.cardTracker.AllCards[suit];
+            var allOfSuit = this.cardtracker.AllCards[suit];
             var maxAvailableForTaking = allOfSuit.Where(x => x.Value != CardTracerState.TakenByOpponent ||
                                                             x.Value != CardTracerState.TakenByPlayer).Max(x => x.Key);
             return (value + maxAvailableForTaking) / BiggestGainDivisor;

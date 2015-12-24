@@ -1,11 +1,11 @@
 ﻿namespace ZatvorenoAI
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
-
-    using CardEvaluator;
     using CardTracers;
     using Contracts;
+    using DecisionMakers;
     using PlayFirstStrategy.ActionChoser;
     using PlayFirstStrategy.CardStatistics;
     using PlayFirstStrategy.TurnContext;
@@ -23,13 +23,14 @@
 
         private static readonly ISummaryReport SummaryReport;
         private static readonly ICardTracker Tracker;
-        private static readonly ICardEval Evaluator2;
         private static readonly IShouldTake TrickDecisionMakerWhenSecond;
         private static readonly IPossibleActions PossibleActionGenerator;
         private static readonly IChoseAction ActionChoser;
         private static readonly ICardStatisticsGenerator CardStatistics;
         private static readonly IOptionEvaluator OptionEval;
         private static readonly IFistActionInTrickChoser CardChoser;
+
+        private IDecisionMaker decisionMaker;
 
         private bool myTurn;
         private int currentGameId;
@@ -38,7 +39,6 @@
         {
             SummaryReport = new SummaryReport();
             Tracker = new QuickSpecificCardSearchTracker();
-            Evaluator2 = new CardEvaluatorFirstPlayer(Tracker);
             TrickDecisionMakerWhenSecond = new ShouldTake(Tracker);
             PossibleActionGenerator = new PossibleActions(Tracker);
             ActionChoser = new ChoseAction(PossibleActionGenerator, TrickDecisionMakerWhenSecond);
@@ -50,6 +50,8 @@
         public ZatvorenoAI()
         {
             Report = true ? (IReport)new DetailedReport() : new EmptyReport();
+
+            this.decisionMaker = DecisionChainProvider.GetSubmissionDecisionChain();
         }
 
         public static IReport Report { get; private set; }
@@ -88,6 +90,52 @@
         }
 
         public override PlayerAction GetTurn(PlayerTurnContext context)
+        {
+            return false ? this.GetTurnOld(context) : this.GetTurnChain(context);
+        }
+
+        public override void EndGame(bool amIWinner)
+        {
+            if (amIWinner)
+            {
+                ++SummaryReport.Wins;
+            }
+
+            this.currentGameId++;
+
+            base.EndGame(amIWinner);
+        }
+
+        private PlayerAction GetTurnChain(PlayerTurnContext context)
+        {
+            var decisionContext = new DecisionMakingContext()
+            {
+                ActionChoser = ActionChoser,
+                CardChoser = CardChoser,
+                MyCards = this.Cards,
+                Tracker = Tracker,
+                TurnContext = context,
+                Validator = this.PlayerActionValidator
+            };
+
+            // TODO: this of something more elegant
+            var action = decisionMaker.Handle(decisionContext);
+
+            switch (action.Type)
+            {
+                case PlayerActionType.PlayCard:
+                    return this.PlayCard(action.Card);
+                case PlayerActionType.ChangeTrump:
+                    return this.ChangeTrump(context.TrumpCard);
+                case PlayerActionType.CloseGame:
+                    return this.CloseGame();
+                default:
+                    throw new InvalidOperationException("Invalid type of player action");
+            }
+        }
+
+        // TODO: delete
+        private PlayerAction GetTurnOld(PlayerTurnContext context)
         {
             this.myTurn = context.IsFirstPlayerTurn;
 
@@ -147,18 +195,6 @@
             cardToPlay = this.PlayCard(condition.Value);
 
             return cardToPlay;
-        }
-
-        public override void EndGame(bool amIWinner)
-        {
-            if (amIWinner)
-            {
-                ++SummaryReport.Wins;
-            }
-
-            this.currentGameId++;
-
-            base.EndGame(amIWinner);
         }
 
         private static int GetMyPoints(PlayerTurnContext context)

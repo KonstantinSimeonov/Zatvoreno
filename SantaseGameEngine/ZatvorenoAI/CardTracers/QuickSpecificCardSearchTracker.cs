@@ -47,6 +47,56 @@
 
         public IList<Card> OpponentTookWith { get; private set; }
 
+        public void SetFinalRoundHands(ICollection<Card> my)
+        {
+            var oppCards = new List<int>();
+            var suits = new List<CardSuit>();
+
+            //    Nine = 9,
+            //Ten = 10,
+            //Jack = 11,
+            //Queen = 12,
+            //King = 13,
+            //Ace = 1,
+
+            var salzichka = new Dictionary<int, CardType>()
+            {
+                { 11, CardType.Ace },
+                { 10, CardType.Ten },
+                { 2, CardType.Jack },
+                { 3, CardType.Queen },
+                { 4, CardType.King },
+                { 0, CardType.Nine },
+            };
+
+            foreach (var suit in this.AllCards)
+            {
+                foreach (var card in suit.Value)
+                {
+                    if (suit.Value[card.Key] == CardTracerState.Unknown)
+                    {
+                        var novoKarta = new Card(suit.Key, salzichka[card.Key]);
+                        if (my.Contains(novoKarta))
+                        {
+                            continue;
+                        }
+
+                        oppCards.Add(card.Key);
+                        this.OpponentTookWith.Add(novoKarta);
+                        suits.Add(suit.Key);
+                    }
+                }
+            }
+
+            for (int i = 0; i < oppCards.Count; i++)
+            {
+                var suit = suits[i];
+                var value = oppCards[i];
+
+                this.AllCards[suit][value] = CardTracerState.InOpponentHand;
+            } 
+        }
+
         public void TrickResolution(PlayerTurnContext context)
         {
             if (context.SecondPlayedCard == null)
